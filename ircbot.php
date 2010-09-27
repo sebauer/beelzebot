@@ -5,11 +5,6 @@ include_once('config.php');
 require('include/insim.class.php');
 include('include/functions.inc.php');
 
-
-define('INSIM_SERVER', 'root1.hpr-network.com');
-define('INSIM_PORT', 64365);
-define('INSIM_PASS', 'wurstbox');
-
 echo 'Connecting to InSim '.INSIM_SERVER.':'.INSIM_PORT.PHP_EOL;
 
 $insim = new InSim();
@@ -73,7 +68,7 @@ while(!feof($conn)){
         echo "Received IS_TINY, replying..".PHP_EOL;
         $insim->sendTiny($insim->makeTiny(TINY_NONE));
     } else if($packet){
-        echo "Received packet of type ".unpack('C', $packet[1]).PHP_EOL;
+//        echo "Received packet of type ".unpack('C', $packet[1]).PHP_EOL;
     }
     $packet = null;
 
