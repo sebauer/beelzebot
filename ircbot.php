@@ -28,7 +28,7 @@ $time = time();
 $packet = null;
 while(!feof($conn)){
     $result = fread($conn, 1024);
-    $insimResult = fread($insim->receiver, 1024);
+    $insimResult = socket_recv($insim->receiver, $packet, 256, MSG_DONTWAIT);
     $part = explode(" ",$result);
     echo $result.PHP_EOL;
 
