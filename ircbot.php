@@ -1,8 +1,5 @@
 <?php
 
-define('CHANNEL', '#octrin');
-define('SERVER', 'clanserver4u.de.quakenet.org');
-
 include_once('config.php');
 
 echo 'Connecting to '.SERVER.PHP_EOL;
