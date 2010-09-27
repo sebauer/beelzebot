@@ -47,9 +47,7 @@ while(!feof($conn)){
     // Work with incoming commands
     if(strpos($result, "PRIVMSG ".USERNAME)!==false){
 
-        var_dump(strpos($result, "\r"));
         $result = str_replace(array("\n","\r"), '', $result);
-        var_dump(strpos($result, "\n"));
 
         $split = explode(':', $result);
         $command = $split[2];
@@ -69,16 +67,21 @@ while(!feof($conn)){
                 $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[2].'&password='.$command[1]);
                 $serverResult = explode("\n", $serverResult);
                 $pre = false;
+                $outputString = '';
                 foreach($serverResult as $resultLine){
+                    if($resultLine == '</pre>'){
+                        break;
+                    }
                     if(!$pre && $resultLine!='<pre>') {
                         continue;
                     } else if($resultLine == '<pre>'){
                         $pre = true;
                         continue;
                     }
-                    sendMessage($resultLine, CHANNEL, $conn);
+                    $outputString .= $resultLine."\r\n";
                     sleep(1);
                 }
+                sendMessage($outputString, CHANNEL, $conn);
                 break;
             case 'rebuildcombo':
                 if($command[1] == ''){
@@ -92,16 +95,21 @@ while(!feof($conn)){
                 $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[2].'&password='.$command[1].'&reset');
                 $serverResult = explode("\n", $serverResult);
                 $pre = false;
+                $outputString = '';
                 foreach($serverResult as $resultLine){
+                    if($resultLine == '</pre>'){
+                        break;
+                    }
                     if(!$pre && $resultLine!='<pre>') {
                         continue;
                     } else if($resultLine == '<pre>'){
                         $pre = true;
                         continue;
                     }
-                    sendMessage($resultLine, CHANNEL, $conn);
+                    $outputString .= $resultLine."\r\n";
                     sleep(1);
                 }
+                sendMessage($outputString, CHANNEL, $conn);
                 break;
             default:
                 sendMessage('Unknown command "'.$command.'"!', $op, $conn);
