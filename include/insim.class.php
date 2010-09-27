@@ -390,6 +390,7 @@ class InSim {
   function getStatePack () {
 
     if(empty($this->receiver) && empty($this->client)) {
+      if($this->debug) echo "Client or Receiver not set...\n";
       return false;
     }
 

@@ -29,7 +29,7 @@ $packet = null;
 socket_set_nonblock($insim->receiver);
 while(!feof($conn)){
     $result = fread($conn, 1024);
-    $packet = socket_read($insim->receiver, 256);
+    $insimResult = @socket_recv($insim->receiver, $packet, 256);
     $part = explode(" ",$result);
     echo $result.PHP_EOL;
 
@@ -163,6 +163,7 @@ while(!feof($conn)){
                 }
                 break;
             case 'showcurrent':
+                $insim->getStatePack();
                 $output = 'Host: ' . formatHostname($insim->hostname) . ', LFS product: ' . $insim->lfsProduct . ', LFS version: ' . $insim->lfsVersion . ', InSim version: ' . $insim->inSimVersion;
                 sendMessage($output, $op, $conn);
                 $output = 'Num. Racers: ' . $insim->numRacers . ', Num. Connections: ' . $insim->numConnections;
