@@ -50,7 +50,7 @@ while(!feof($conn)){
     // Work with incoming commands
     if(strpos($result, "PRIVMSG ".USERNAME)!==false){
 
-        $result = str_replace("\n\r", '', $result);
+        $result = str_replace("\n", '', $result);
 
         $split = explode(':', $result);
         $command = $split[2];
