@@ -21,7 +21,7 @@ while(!feof($conn)){
         $reply = $ping[1];
         sendCommand("PONG $reply\n\r", $conn);
     }
-    if(strpos($result, "MODE octrinbot +i")!==false){
+    if(strpos($result, "MODE ".USERNAME." +i")!==false){
         if (!$firstrun) {
             sendCommand("JOIN #octrin\n\r", $conn);
             $firstrun = true;
