@@ -15,7 +15,6 @@ echo 'InSim connected!'.PHP_EOL;
 
 echo 'Connecting to IRC Server '.SERVER.PHP_EOL;
 $conn = fsockopen(SERVER, 6667);
-stream_set_timeout($conn, 3);
 echo 'Connected'.PHP_EOL;
 
 sendCommand("USER ".USERNAME." 0 0 ".USERNAME, $conn, false);
@@ -24,12 +23,20 @@ $connected = false;
 $time = time();
 $packet = null;
 
-socket_set_nonblock($insim->receiver);
-//stream_set_blocking($conn, 0);
+if($insim->receiver == null){
+	die('InSim FAIL');
+}
 
-while(!feof($conn)){
+stream_set_blocking($conn, 0);
+
+$foo = NULL;
+$timeout = time() + 5;
+$resultLfs = true;
+while (!feof($conn) && $resultLfs != null) {
     $result = fread($conn, 1024);
-    $packet = socket_read($insim->receiver, 1024);
+    $packet = null;
+    $timeout = time() + 5;
+    $resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_WAITALL);
     $part = explode(" ",$result);
     if($result != ''){
         echo $result.PHP_EOL;
@@ -40,38 +47,26 @@ while(!feof($conn)){
         $ping = explode(":", $result);
         $reply = $ping[1];
         sendCommand("PONG $reply\n\r", $conn);
-        if (!$firstrun) {
-            sendCommand("JOIN ".CHANNEL."\n\r", $conn);
-            sendCommand("AUTH ".USERNAME." ".PASSWORD, $conn);
-            sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Racers online on server: ".$insim->numRacers, $conn);
-            $firstrun = true;
-        }
+        $pong = true;
     }
-    /*
-    if($connected && (time()-$time)>60*5) {
-        $time = time();
-
-        $hosts = unserialize(gzuncompress(file_get_contents("http://www.lfsworld.net/pubstat/get_stat2.php?version=1.4&idk=2FDVRzY1n7Xp3Vp93jSbHus4rtFMWvF2&action=hosts&s=2&c=2")));
-
-        foreach($hosts as $host){
-            if(strpos(strtolower($host['hostname']), 'octrin')===false){
-                continue;
-            }
-            $nrofracers = intval($host['nrofracers']);
-            echo "Racers online: ".$nrofracers.PHP_EOL;
-            sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Racers online on server: $nrofracers", $conn);
-        }
-    }*/
+    if ($pong && !$firstrun && strpos($result, USERNAME.' +i')!==false) {
+        sendCommand("AUTH ".USERNAME." ".PASSWORD, $conn);
+    	sendCommand("JOIN ".CHANNEL."\n\r", $conn);
+    	sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Users online on server: ".intval($insim->numConnections - 1), $conn);
+        $firstrun = true;
+    }
 
     if ($packet && $packet[1] == pack("C", ISP_STA)) {
         echo "Received state pack..".PHP_EOL;
         $insim->handleStatePackage($packet);
-        sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Racers online on server: ".$insim->numRacers, $conn);
+        if($firstrun) {
+        	sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Users online on server: ".intval($insim->numConnections - 1), $conn);
+        }
     } else if($packet && $packet[1] == pack("C", ISP_TINY)) {
         echo "Received IS_TINY, replying..".PHP_EOL;
         $insim->sendTiny($insim->makeTiny(TINY_NONE));
     } else if($packet){
-//        echo "Received packet of type ".unpack('C', $packet[1]).PHP_EOL;
+//        echo strlen($packet).PHP_EOL;
     }
     $packet = null;
 
