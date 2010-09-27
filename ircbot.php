@@ -5,6 +5,23 @@ include_once('config.php');
 require('include/insim.class.php');
 include('include/functions.inc.php');
 
+if (!defined('_REVISION')) {
+	if (file_exists('.svn' . DIRECTORY_SEPARATOR. 'entries')) {
+		$svn = file('.svn' . DIRECTORY_SEPARATOR . 'entries');
+		if (is_numeric(trim($svn[3]))) {
+			$version = $svn[3];
+		} else { // pre 1.4 svn used xml for this file
+			$version = explode('"', $svn[4]);
+			$version = $version[1];
+		}
+		define ('_REVISION', trim($version));
+		unset ($svn);
+		unset ($version);
+	} else {
+		define ('_REVISION', 0); // default if no svn data avilable
+	}
+}
+
 echo 'Connecting to InSim '.INSIM_SERVER.':'.INSIM_PORT.PHP_EOL;
 
 $insim = new InSim();
@@ -73,6 +90,8 @@ while (!feof($conn)) {
 		sendCommand("AUTH ".USERNAME." ".PASSWORD, $conn);
 		sendCommand("JOIN ".CHANNEL."\n\r", $conn);
 		sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Users online on server: ".intval($insim->numConnections - 1), $conn);
+		sendMessage('**** Octrin LFS/IRC Bot starting its work.. - Revions .'._REVISION.' ****', CHANNEL, $conn);
+		sendMessage('**** Get ready to rumble! ****', CHANNEL, $conn);
 		$firstrun = true;
 	}
 
