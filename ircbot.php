@@ -151,6 +151,27 @@ while(!feof($conn)){
                 }
                 break;
             case 'showcurrent':
+
+                $output = 'LFS product: ' . $insim->lfsProduct . ', LFS version: ' . $insim->lfsVersion . ', InSim version: ' . $insim->inSimVersion;
+                sendMessage($output, $op, $conn);
+                $output = 'Host: ' . formatHostname($insim->hostname) . ', Num. Racers: ' . $insim->numRacers . ', Num. Connections: ' . $insim->numConnections;
+                sendMessage($output, $op, $conn);
+                switch($insim->raceInProgress) {
+                case 0:
+                  $raceInProgress = 'idle';
+                  break;
+                case 1:
+                  $raceInProgress = 'race';
+                  break;
+                case 2:
+                  $raceInProgress = 'qualifying';
+                  break;
+                }
+                $output = 'Race status: ' . $raceInProgress . ', Qualifying: ' . $insim->qualMins . ' minutes, Race length: ' . $insim->raceLaps . ' ' . $insim->raceCurrency;
+                sendMessage($output, $op, $conn);
+                $output = 'Track: ' . getTrackName($insim->track) . ', Weather: ' . $insim->weather . ', Wind: ' . $insim->wind;
+                sendMessage($output, $op, $conn);
+
                 break;
             case 'help':
                 sendMessage('Available commands: HELP, CREATECOMBO, REBUILDCOMBO, SHOWCOMBO', $op, $conn);
@@ -164,6 +185,8 @@ while(!feof($conn)){
         }
     }
 }
+
+$insim->disconnect();
 
 function sendMessage($input, $receiver = CHANNEL, $conn){
     sendCommand('PRIVMSG '.$receiver.' :'.$input, $conn);
