@@ -413,10 +413,11 @@ class InSim {
 
     // check if really a statePack arrived or something else we cant deal with at the moment
     if (!$packet || $packet[1] != pack("C", ISP_STA)) {
-        foreach($packet as $pack){
-            var_dump(unpack("C", $pack));
-        }
-//      var_dump(unpack("C", $packet[1]));
+        var_dump(unpack("C", $packet[0]));
+        var_dump(unpack("C", $packet[1]));
+        var_dump(unpack("C", $packet[2]));
+        var_dump(unpack("C", $packet[3]));
+        var_dump(unpack("C", $packet[4]));
       if($this->debug) echo "No StatePack packet received (Packet is of type " . unpack("C", $packet[1])  . ")<br />\n";
       return false;
     }
