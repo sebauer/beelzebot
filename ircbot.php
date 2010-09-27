@@ -153,6 +153,7 @@ while(!feof($conn)){
             case 'showcurrent':
 
                 $insim->getStatePack();
+                sleep(1);
 
                 $output = 'Host: ' . formatHostname($insim->hostname) . ', LFS product: ' . $insim->lfsProduct . ', LFS version: ' . $insim->lfsVersion . ', InSim version: ' . $insim->inSimVersion;
                 sendMessage($output, $op, $conn);
