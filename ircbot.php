@@ -54,7 +54,7 @@ while(!feof($conn)){
         $command = $command[2];
         $op = explode('!', $command[1]);
         $op = $op[0];
-        switch(strotolower($command)){
+        switch(strtolower($command)){
             case 'createRandCombo':
                 break;
             default:
