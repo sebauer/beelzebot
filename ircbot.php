@@ -28,7 +28,7 @@ $connected = false;
 $time = time();
 $packet = null;
 
-//socket_set_nonblock($insim->receiver);
+socket_set_nonblock($insim->receiver);
 stream_set_blocking($conn, 0);
 
 while(!feof($conn)){
@@ -229,6 +229,7 @@ while(!feof($conn)){
                 sendMessage('Unknown command "'.$command[0].'"!', $op, $conn);
         }
     }
+    time_nanosleep(0, 500000000);
 }
 
 $insim->disconnect();
