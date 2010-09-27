@@ -31,12 +31,29 @@ stream_set_blocking($conn, 0);
 
 $foo = NULL;
 $timeout = time() + 1;
+$activityTimeout = time() + 60;
 $resultLfs = true;
 while (!feof($conn)) {
 	$result = fread($conn, 1024);
 	$packet = null;
 	$timeout = time() + 1;
-	$resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_WAITALL);
+	if($serverActive) {
+		$resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_WAITALL);
+	} else {
+		$resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_NOWAIT);
+	}
+	if(time() > $activityTimeout){
+		$activityTimeout = time()+60;
+		echo "Checking server idle status via LFSWorld..".PHP_EOL;
+		$statFile = file_get_contents("http://www.lfsworld.net/hoststatus/?h=".urlencode(LFSHOST));
+		if(strpos($statFile, '0 / ')!==false){
+			$serverActive = false;
+			echo "Server currently idle...".PHP_EOL;
+		} else {
+			$serverActive = true;
+			echo "Server seems to be active...".PHP_EOL;
+		}
+	}
 	$part = explode(" ",$result);
 	if($result != ''){
 		echo $result.PHP_EOL;
@@ -62,6 +79,12 @@ while (!feof($conn)) {
 	if ($packet && $packet[1] == pack("C", ISP_STA)) {
 		echo "Received state pack..".PHP_EOL;
 		$insim->handleStatePackage($packet);
+
+		if($insim->numConnections==1){
+			$serverActive = false;
+			echo "Server currently idle..".PHP_EOL;
+		}
+		
 		if($firstrun) {
 			sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Users online on server: ".intval($insim->numConnections - 1), $conn);
 		}
@@ -78,8 +101,16 @@ while (!feof($conn)) {
 				sendMessage('[LFS] '.$text, CHANNEL, $conn);
 			}
 		}
-	  
-	}  else if($packet && $packet[1] == pack("C", ISP_TINY)) {
+			
+	}  else if($packet && $packet[1] == pack("C", ISP_PLL)) {
+		echo "Received ISP_PLL...".PHP_EOL;
+
+		if($insim->numConnections==2){
+			$serverActive = false;
+			echo "Last player left, server now idle..".PHP_EOL;
+		}
+			
+	} else if($packet && $packet[1] == pack("C", ISP_TINY)) {
 		echo "Received IS_TINY, replying..".PHP_EOL;
 		$insim->sendTiny($insim->makeTiny(TINY_NONE));
 	}else if($packet){
