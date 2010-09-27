@@ -77,8 +77,11 @@ while(!feof($conn)){
                         $pre = true;
                         continue;
                     }
+                    if($resultLine=='')continue;
                     sendMessage($resultLine, CHANNEL, $conn);
-                    time_nanosleep(0, 500000000);
+                    if($count%3==0) {
+                        time_nanosleep(0, 500000000);
+                    }
                 }
                 break;
             case 'rebuildcombo':
@@ -93,7 +96,7 @@ while(!feof($conn)){
                 $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[2].'&password='.$command[1].'&reset');
                 $serverResult = explode("\n", $serverResult);
                 $pre = false;
-                foreach($serverResult as $resultLine){
+                foreach($serverResult as $count => $resultLine){
                     if($resultLine == '</pre>'){
                         break;
                     }
@@ -103,9 +106,44 @@ while(!feof($conn)){
                         $pre = true;
                         continue;
                     }
+                    if($resultLine=='')continue;
                     sendMessage($resultLine, CHANNEL, $conn);
-                    time_nanosleep(0, 500000000);
+                    if($count%3==0) {
+                        time_nanosleep(0, 500000000);
+                    }
                 }
+                break;
+            case 'showcombo':
+                if($command[1] == ''){
+                    sendMessage('No date param given!', $op, $conn);
+                    break;
+                }
+                $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[1]);
+                $serverResult = explode("\n", $serverResult);
+                $pre = false;
+                foreach($serverResult as $count => $resultLine){
+                    if($resultLine == '</pre>'){
+                        break;
+                    }
+                    if(!$pre && $resultLine!='<pre>') {
+                        continue;
+                    } else if($resultLine == '<pre>'){
+                        $pre = true;
+                        continue;
+                    }
+                    if($resultLine=='')continue;
+                    sendMessage($resultLine, CHANNEL, $conn);
+                    if($count%3==0) {
+                        time_nanosleep(0, 500000000);
+                    }
+                }
+                break;
+            case 'help':
+                sendMessage('Available commands: HELP, CREATECOMBO, REBUILDCOMBO, SHOWCOMBO', $op, $conn);
+                sendMessage('Syntax for combo commands: /msg octbot <command> [[<password>] <date>]', $op, $conn);
+                time_nanosleep(0, 500000000);
+                sendMessage('Sample: /msg octbot CREATECOMBO secretpassword TestEvent', $op, $conn);
+                sendMessage('Sample: /msg octbot SHOWCOMB TestEvent', $op, $conn);
                 break;
             default:
                 sendMessage('Unknown command "'.$command.'"!', $op, $conn);
