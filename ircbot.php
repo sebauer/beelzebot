@@ -58,7 +58,7 @@ while(!feof($conn)){
             case 'createRandCombo':
                 break;
             default:
-                sendMessage('Unknown command!', $op, $conn);
+                sendMessage('Unknown command "'.$command.'"!', $op, $conn);
         }
     }
 }
