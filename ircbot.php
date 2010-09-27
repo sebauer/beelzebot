@@ -154,7 +154,7 @@ while(!feof($conn)){
 
                 $insim->getStatePack();
 
-                $output = 'Host: ' . formatHostname($insim->hostname) . 'LFS product: ' . $insim->lfsProduct . ', LFS version: ' . $insim->lfsVersion . ', InSim version: ' . $insim->inSimVersion;
+                $output = 'Host: ' . formatHostname($insim->hostname) . ', LFS product: ' . $insim->lfsProduct . ', LFS version: ' . $insim->lfsVersion . ', InSim version: ' . $insim->inSimVersion;
                 sendMessage($output, $op, $conn);
                 $output = 'Num. Racers: ' . $insim->numRacers . ', Num. Connections: ' . $insim->numConnections;
                 sendMessage($output, $op, $conn);
