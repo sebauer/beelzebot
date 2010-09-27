@@ -90,7 +90,7 @@ while (!feof($conn)) {
 		sendCommand("AUTH ".USERNAME." ".PASSWORD, $conn);
 		sendCommand("JOIN ".CHANNEL."\n\r", $conn);
 		sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Users online on server: ".intval($insim->numConnections - 1), $conn);
-		sendMessage('**** Octrin LFS/IRC Bot starting its work.. - Revions .'._REVISION.' ****', CHANNEL, $conn);
+		sendMessage('**** Octrin LFS/IRC Bot starting its work.. - Revion .'._REVISION.' ****', CHANNEL, $conn);
 		sendMessage('**** Get ready to rumble! ****', CHANNEL, $conn);
 		$firstrun = true;
 	}
@@ -172,6 +172,7 @@ while (!feof($conn)) {
 					}
 					if($resultLine=='')continue;
 					sendMessage($resultLine, CHANNEL, $conn);
+					$insim->sendTextMessage('[IRC]: '.$resultLine);
 					if($count%4==0) {
 						time_nanosleep(0, 500000000);
 					}
@@ -201,6 +202,7 @@ while (!feof($conn)) {
 					}
 					if($resultLine=='')continue;
 					sendMessage($resultLine, CHANNEL, $conn);
+					$insim->sendTextMessage('[IRC]: '.$resultLine);
 					if($count%4==0) {
 						time_nanosleep(0, 500000000);
 					}
