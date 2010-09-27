@@ -43,6 +43,7 @@ while(!feof($conn)){
         if (!$firstrun) {
             sendCommand("JOIN ".CHANNEL."\n\r", $conn);
             sendCommand("AUTH ".USERNAME." ".PASSWORD, $conn);
+            sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Racers online on server: ".$insim->numRacers, $conn);
             $firstrun = true;
         }
     }
