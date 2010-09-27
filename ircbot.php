@@ -12,7 +12,7 @@ define('INSIM_PASS', 'wurstbox');
 echo 'Connecting to InSim '.INSIM_SERVER.':'.INSIM_PORT.PHP_EOL;
 
 $insim = new InSim();
-$insim->debug(0);
+$insim->debug(1);
 
 $insim->isi(INSIM_SERVER, INSIM_PORT, INSIM_PASS);
 echo 'InSim connected!'.PHP_EOL;
