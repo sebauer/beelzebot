@@ -196,13 +196,14 @@ while(!feof($conn)){
                             sendMessage('Unknown command "'.$command[1].'"!', $op, $conn);
                             break;
                     }
+                } else {
+                    sendMessage('Available commands: HELP, CREATECOMBO, REBUILDCOMBO, SHOWCOMBO, SHOWCURRENT', $op, $conn);
+                    sendMessage('Execute HELP <command> to get help on a specific command', $op, $conn);
+                    sendMessage('Syntax for combo commands: /msg '.USERNAME.' <command> [[<password>] <date>]', $op, $conn);
+                    time_nanosleep(0, 500000000);
+                    sendMessage('Sample: /msg '.USERNAME.' CREATECOMBO secretpassword TestEvent', $op, $conn);
+                    sendMessage('Sample: /msg '.USERNAME.' SHOWCOMBO TestEvent', $op, $conn);
                 }
-                sendMessage('Available commands: HELP, CREATECOMBO, REBUILDCOMBO, SHOWCOMBO, SHOWCURRENT', $op, $conn);
-                sendMessage('Execute HELP <command> to get help on a specific command', $op, $conn);
-                sendMessage('Syntax for combo commands: /msg '.USERNAME.' <command> [[<password>] <date>]', $op, $conn);
-                time_nanosleep(0, 500000000);
-                sendMessage('Sample: /msg '.USERNAME.' CREATECOMBO secretpassword TestEvent', $op, $conn);
-                sendMessage('Sample: /msg '.USERNAME.' SHOWCOMBO TestEvent', $op, $conn);
                 break;
             default:
                 sendMessage('Unknown command "'.$command.'"!', $op, $conn);
