@@ -62,10 +62,11 @@ while(!feof($conn)){
     if ($packet && $packet[1] == pack("C", ISP_STA)) {
         echo "Received state pack..";
         $insim->handleStatePackage($packet);
-    }
-    if ($packet && $packet[1] == pack("C", ISP_TINY)) {
+    } else if($packet && $packet[1] == pack("C", ISP_TINY)) {
         echo "Received IS_TINY, replying..";
         $insim->sendTiny($insim->makeTiny(TINY_NONE));
+    } else {
+        echo "Received packet of type ".unpack('C', $packet[1]);
     }
 
     // Work with incoming commands
@@ -218,7 +219,7 @@ while(!feof($conn)){
                 }
                 break;
             default:
-                sendMessage('Unknown command "'.$command.'"!', $op, $conn);
+                sendMessage('Unknown command "'.$command[0].'"!', $op, $conn);
         }
     }
 }
