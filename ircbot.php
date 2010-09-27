@@ -1,5 +1,7 @@
 <?php
 
+define('CHANNEL', '#octbottest');
+
 include_once('config.php');
 
 echo 'Connecting to tiscali.dk.quakenet.org'.PHP_EOL;
@@ -23,11 +25,11 @@ while(!feof($conn)){
     }
     if(strpos($result, "MODE ".USERNAME." +i")!==false){
         if (!$firstrun) {
-            sendCommand("JOIN #octrin\n\r", $conn);
+            sendCommand("JOIN ".CHANNEL."\n\r", $conn);
             $firstrun = true;
         }
     }
-    if(strpos($result, "JOIN #octrin")!==false && !$connected){
+    if(strpos($result, "JOIN ".CHANNEL)!==false && !$connected){
         sendCommand("AUTH ".USERNAME." ".PASSWORD, $conn);
 //        sendCommand("PRIVMSG #octrin :lolol i'm in", $conn);
         $connected = true;
@@ -43,14 +45,14 @@ while(!feof($conn)){
             }
             $nrofracers = intval($host['nrofracers']);
             echo "Racers online: ".$nrofracers.PHP_EOL;
-            sendCommand("TOPIC #octrin :Octrin Racing - Racers online on server: $nrofracers", $conn);
+            sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Racers online on server: $nrofracers", $conn);
         }
     }
 
     // Work with incoming commands
     if(strpos($result, "PRIVMSG ".USERNAME)!==false){
 
-        $result = str_replace("\n", '', $result);
+        str_replace(PHP_EOL, '', $result);
 
         $split = explode(':', $result);
         $command = $split[2];
@@ -65,7 +67,7 @@ while(!feof($conn)){
     }
 }
 
-function sendMessage($input, $receiver = '#octrin', $conn){
+function sendMessage($input, $receiver = CHANNEL, $conn){
     sendCommand('PRIVMSG '.$receiver.' :'.$input, $conn);
 }
 
