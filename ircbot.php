@@ -218,7 +218,6 @@ while (!feof($conn)) {
 					}
 					$text = str_replace(':lfs ', '', $text, $count);
 				}
-				break;
 				sendMessage($op.' [toLFS]: '.$text, CHANNEL, $conn);
 				$insim->sendTextMessage($op.'[IRC]: '.$text);
 				break;
