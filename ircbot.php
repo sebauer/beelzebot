@@ -35,7 +35,7 @@ while(!feof($conn)){
     if($connected && (time()-$time)>60*5) {
         $time = time();
 
-        $hosts = unserialize(gzdecode(file_get_contents("http://www.lfsworld.net/pubstat/get_stat2.php?version=1.4&idk=2FDVRzY1n7Xp3Vp93jSbHus4rtFMWvF2&action=hosts&s=2&c=1")));
+        $hosts = unserialize(gzuncompress(file_get_contents("http://www.lfsworld.net/pubstat/get_stat2.php?version=1.4&idk=2FDVRzY1n7Xp3Vp93jSbHus4rtFMWvF2&action=hosts&s=2&c=2")));
 
         foreach($hosts as $host){
             if(strpos(strtolower($host['hostname']), 'octrin')===false){
