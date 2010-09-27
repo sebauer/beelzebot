@@ -135,8 +135,8 @@ class InSim {
     // Prepare packet
     $packet  = pack("C", intval(44));         // Size of packet
     $packet .= pack("C", intval(ISP_ISI));    // ISP_ISI
-    $packet .= pack("C", intval(1));          // byte	ReqI; If non-zero LFS will send an IS_VER packet
-    $packet .= pack("C", intval(0));          // byte	Zero; 0
+    $packet .= pack("C", intval(1));          // byte   ReqI; If non-zero LFS will send an IS_VER packet
+    $packet .= pack("C", intval(0));          // byte   Zero; 0
 
 
     $packet .= pack("S", $this->localport);   // response port
@@ -230,8 +230,8 @@ class InSim {
   function makeTiny( $subtype ) {
     $packet  = pack("C", intval(4));         // Size of packet
     $packet .= pack("C", intval(3));          // ISP_TINY
-    $packet .= pack("C", intval(1));          // byte	ReqI; If non-zero LFS will send an IS_VER packet
-    $packet .= pack("C", intval($subtype));          // byte	SubT; 0
+    $packet .= pack("C", intval(1));          // byte   ReqI; If non-zero LFS will send an IS_VER packet
+    $packet .= pack("C", intval($subtype));          // byte    SubT; 0
 
     return $packet;
   }
@@ -344,8 +344,8 @@ class InSim {
       $temp = unpack("S",$isv_raw);
       $this->inSimVersion = $temp[1];
 
-	  if(substr($this->lfsVersion, 4,1)=='0')
-	    $this->lfsVersion = substr($this->lfsVersion, 0, 4);
+      if(substr($this->lfsVersion, 4,1)=='0')
+        $this->lfsVersion = substr($this->lfsVersion, 0, 4);
 
       return true;
     }
@@ -481,19 +481,19 @@ class InSim {
 
     // We only show all this blahblah stuff only if there's somebody on the server, otherwise simply reinit.
     if($this->numConnections > 1) {
-    	$this->sendCommand('rcm', $message);
-    	$this->sendCommand('rcm_all');
+        $this->sendCommand('rcm', $message);
+        $this->sendCommand('rcm_all');
       sleep(5);
       $this->sendCommand('rcc_all');
 
-    	for($i = 5; $i > 0; $i--) {
-    	  $this->sendCommand('msg', '^1Server will be restarted in ' . $i . '..');
-    	  sleep(1);
-    	}
-    	$this->sendCommand('msg', '^1The Server will now be restarted.');
-    	sleep(2);
+        for($i = 5; $i > 0; $i--) {
+          $this->sendCommand('msg', '^1Server will be restarted in ' . $i . '..');
+          sleep(1);
+        }
+        $this->sendCommand('msg', '^1The Server will now be restarted.');
+        sleep(2);
     }
-  	$this->sendCommand('reinit');
+    $this->sendCommand('reinit');
   }
 
   /**
@@ -528,31 +528,31 @@ class InSim {
         $packetType = ISP_MSX;
     }
 
-  	if(strlen($text) > $maxLen) {
-  		while($i < strlen($text)) {
-  			$string = substr($text, $i, $maxLen-1);
+    if(strlen($text) > $maxLen) {
+        while($i < strlen($text)) {
+            $string = substr($text, $i, $maxLen-1);
 
-  			$packet = pack("c", $maxLen+4);
-  			$packet .= pack("c", $packetType);
-  			$packet .= pack("c", 1);
-  			$packet .= pack("c", 0);
-  			$packet .= str_pad($string, $maxLen, "\0");
+            $packet = pack("c", $maxLen+4);
+            $packet .= pack("c", $packetType);
+            $packet .= pack("c", 1);
+            $packet .= pack("c", 0);
+            $packet .= str_pad($string, $maxLen, "\0");
 
-  			if($this->debug) echo "sending partial message '" . $string . "'<br />\n";
-    		fwrite($this->client, $packet, strlen($packet)); // Third parameter to make PHP ignore magic_quotes-setting
-    		$i += strlen($string);
-  		}
-	  } else {
-  		// Will send a text message to the server
-			$packet = pack("c", $maxLen+4);
-			$packet .= pack("c", $packetType);
-			$packet .= pack("c", 1);
-			$packet .= pack("c", 0);
-  		$packet .= str_pad($text, $maxLen, "\0");
-  	  // Send packet
-    	if($this->debug) echo "sending message '" . $text . "'<br />\n";
-  	  fwrite($this->client, $packet, strlen($packet)); // Third parameter to make PHP ignore magic_quotes-setting";
- 	  }
+            if($this->debug) echo "sending partial message '" . $string . "'<br />\n";
+            fwrite($this->client, $packet, strlen($packet)); // Third parameter to make PHP ignore magic_quotes-setting
+            $i += strlen($string);
+        }
+      } else {
+        // Will send a text message to the server
+            $packet = pack("c", $maxLen+4);
+            $packet .= pack("c", $packetType);
+            $packet .= pack("c", 1);
+            $packet .= pack("c", 0);
+        $packet .= str_pad($text, $maxLen, "\0");
+      // Send packet
+        if($this->debug) echo "sending message '" . $text . "'<br />\n";
+      fwrite($this->client, $packet, strlen($packet)); // Third parameter to make PHP ignore magic_quotes-setting";
+      }
   }
 
   /**
