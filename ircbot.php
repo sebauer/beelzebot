@@ -6,8 +6,8 @@ include('include/functions.inc.php');
 
 
 define('INSIM_SERVER', 'root1.hpr-network.com');
-define('INSIM_PORT', 9000);
-define('INSIM_PASS', '20octrin10');
+define('INSIM_PORT', 64365);
+define('INSIM_PASS', 'wurstbox');
 
 echo 'Connecting to InSim '.INSIM_SERVER.':'.INSIM_PORT.PHP_EOL;
 
