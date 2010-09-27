@@ -29,7 +29,7 @@ $time = time();
 $packet = null;
 
 socket_set_nonblock($insim->receiver);
-stream_set_blocking($conn, 0);
+//stream_set_blocking($conn, 0);
 
 while(!feof($conn)){
     $result = fread($conn, 1024);
