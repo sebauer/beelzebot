@@ -29,7 +29,7 @@ while(!feof($conn)){
     }
     if(strpos($result, "JOIN #octrin")!==false && !$connected){
         sendCommand("AUTH ".USERNAME." ".PASSWORD, $conn);
-        sendCommand("PRIVMSG #octrin :lolol i'm in", $conn);
+//        sendCommand("PRIVMSG #octrin :lolol i'm in", $conn);
         $connected = true;
     }
     if($connected && (time()-$time)>60*5) {
