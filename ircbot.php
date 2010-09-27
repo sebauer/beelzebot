@@ -29,7 +29,7 @@ $packet = null;
 socket_set_nonblock($insim->receiver);
 while(!feof($conn)){
     $result = fread($conn, 1024);
-    $insimResult = @socket_recv($insim->receiver, $packet, 256);
+    $packet = socket_read($insim->receiver, 256);
     $part = explode(" ",$result);
     echo $result.PHP_EOL;
 
