@@ -229,7 +229,6 @@ while(!feof($conn)){
                 sendMessage('Unknown command "'.$command[0].'"!', $op, $conn);
         }
     }
-    time_nanosleep(0, 500000000);
 }
 
 $insim->disconnect();

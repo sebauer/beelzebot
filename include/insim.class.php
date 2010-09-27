@@ -424,7 +424,7 @@ class InSim {
   }
 
   function sendTiny($packet){
-    if($this->debug) echo "Sending Tiny..\n";
+    if($this->debug) echo "Sending Tiny ".unpack('C', $packet)."..\n";
     fwrite($this->client, $packet, strlen($packet));
   }
 
