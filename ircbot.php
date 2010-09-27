@@ -1,6 +1,9 @@
 <?php
 
 include_once('config.php');
+require('include/insim.class.php');
+include('include/functions.inc.php');
+
 
 define('INSIM_SERVER', 'root1.hpr-network.com');
 define('INSIM_PORT', 9000);
