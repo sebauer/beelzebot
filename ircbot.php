@@ -170,7 +170,7 @@ while(!feof($conn)){
                 }
                 break;
             case 'showcurrent':
-                $insim->getStatePack();
+                $insim->sendTiny($insim->makeTiny(TINY_SST));
                 $output = 'Host: ' . formatHostname($insim->hostname) . ', LFS product: ' . $insim->lfsProduct . ', LFS version: ' . $insim->lfsVersion . ', InSim version: ' . $insim->inSimVersion;
                 sendMessage($output, $op, $conn);
                 $output = 'Num. Racers: ' . $insim->numRacers . ', Num. Connections: ' . $insim->numConnections;
