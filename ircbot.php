@@ -48,7 +48,7 @@ stream_set_blocking($conn, 0);
 
 $foo = NULL;
 $timeout = time() + 1;
-$activityTimeout = time() + 60;
+$activityTimeout = time() + 30;
 $resultLfs = true;
 while (!feof($conn)) {
 	$result = fread($conn, 1024);
@@ -60,7 +60,7 @@ while (!feof($conn)) {
 		$resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_NOWAIT);
 	}
 	if(time() > $activityTimeout){
-		$activityTimeout = time()+60;
+		$activityTimeout = time()+30;
 		echo "Checking server idle status via LFSWorld..".PHP_EOL;
 		$statFile = file_get_contents("http://www.lfsworld.net/hoststatus/?h=".urlencode(LFSHOST));
 		if(strpos($statFile, '0 / ')!==false){
@@ -79,10 +79,8 @@ while (!feof($conn)) {
 	if(strpos($result, 'PING :')!==false)
 	{
 		$ping = explode(":", $result);
-		$reply = $ping[1];
-		if(count($ping)>2){
-			$reply = $ping[3];
-		}
+		$reply = explode("\n", $ping[1]);
+		$reply = $reply[0];
 		sendCommand("PONG $reply\n\r", $conn);
 		$pong = true;
 	}
@@ -138,7 +136,9 @@ while (!feof($conn)) {
 	$packet = null;
 
 	// Work with incoming commands
-	if(strpos($result, "PRIVMSG ".USERNAME)!==false){
+	if(strpos($result, "PRIVMSG ".USERNAME)!==false || strpos($result, "PRIVMSG ".CHANNEL.' :!lfs')!==false){
+		
+		echo "Processing command..".PHP_EOL;
 
 		$result = str_replace(array("\n","\r"), '', $result);
 
@@ -147,6 +147,9 @@ while (!feof($conn)) {
 		$op = explode('!', $split[1]);
 		$op = $op[0];
 		$command = explode(' ', $command);
+		if(strtolower($command[0])=='!lfs'){
+			$command[0] = 'lfs';
+		}
 		switch(strtolower($command[0])){
 			case 'createcombo':
 				if($command[1] == ''){
@@ -261,6 +264,7 @@ while (!feof($conn)) {
 					sendMessage('No text given!', $op, $conn);
 					break;
 				}
+				var_dump($command[1]);
 				$count = 1;
 				$text = str_replace('lfs ', '', $split[2], $count);
 				if(count($split)>3){
@@ -268,7 +272,7 @@ while (!feof($conn)) {
 					for($i=2;$i < count($split);$i++){
 						$text .= ':'.$split[$i];
 					}
-					$text = str_replace(':lfs ', '', $text, $count);
+					$text = str_replace(array(':lfs ', ':!lfs '), '', $text, $count);
 				}
 				sendMessage($op.' [toLFS]: '.$text, CHANNEL, $conn);
 				$insim->sendTextMessage($op.'[IRC]: '.$text);
@@ -285,24 +289,25 @@ while (!feof($conn)) {
 				if($command[1] != '' && $command[1] != 'help'){
 					switch(strtolower($command[1])){
 						case 'showcurrent':
-							sendMessage('SHOWCURRENT - Usage: /msg '.USERNAME.' SHOWCURRENT', $op, $conn);
 							sendMessage('Shows the current server status', $op, $conn);
+							sendMessage('SHOWCURRENT - Usage: /msg '.USERNAME.' SHOWCURRENT', $op, $conn);
 							break;
 						case 'createcombo':
-							sendMessage('CREATECOMBO - Usage: /msg '.USERNAME.' CREATECOMBO <password> <date>', $op, $conn);
 							sendMessage('Creates a new combo for the given date', $op, $conn);
+							sendMessage('CREATECOMBO - Usage: /msg '.USERNAME.' CREATECOMBO <password> <date>', $op, $conn);
 							break;
 						case 'rebuildcombo':
-							sendMessage('REBUILDCOMBO - Usage: /msg '.USERNAME.' REBUILDCOMBO <password> <date>', $op, $conn);
 							sendMessage('Resets the combo for the given date and creates a new one', $op, $conn);
+							sendMessage('REBUILDCOMBO - Usage: /msg '.USERNAME.' REBUILDCOMBO <password> <date>', $op, $conn);
 							break;
 						case 'showcombo':
-							sendMessage('SHOWCOMBO - Usage: /msg '.USERNAME.' SHOWCOMBO <date>', $op, $conn);
 							sendMessage('Shows the combo for the given date', $op, $conn);
+							sendMessage('SHOWCOMBO - Usage: /msg '.USERNAME.' SHOWCOMBO <date>', $op, $conn);
 							break;
 						case 'lfs':
-							sendMessage('LFS - Usage: /msg '.USERNAME.' LFS <text>', $op, $conn);
 							sendMessage('Sends a text message to LFS', $op, $conn);
+							sendMessage('LFS - Usage: /msg '.USERNAME.' LFS <text>', $op, $conn);
+							sendMessage('Alias: !lfs <text>', $op, $conn);
 							break;
 						default:
 							sendMessage('Unknown command "'.$command[1].'"!', $op, $conn);
