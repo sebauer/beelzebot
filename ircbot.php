@@ -212,10 +212,13 @@ while (!feof($conn)) {
 				$count = 1;
 				$text = str_replace('lfs ', '', $split[2], $count);
 				if(count($split)>3){
+					$text = '';
 					for($i=2;$i < count($split);$i++){
 						$text .= ':'.$split[$i];
-					}	
+					}
+					$text = str_replace(':lfs ', '', $text, $count);
 				}
+				break;
 				sendMessage($op.' [toLFS]: '.$text, CHANNEL, $conn);
 				$insim->sendTextMessage($op.'[IRC]: '.$text);
 				break;
