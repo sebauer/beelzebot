@@ -270,6 +270,7 @@ class InSim {
     }
     // check if really a ISM-packet arrived or something else we cant deal with at the moment
     if (!$packet || $packet[1] != pack("C", ISP_ISM)) {
+      var_dump(unpack("C", $packet[1]));
       echo "No hostname packet received.. (Packet is of type " . unpack("C", $packet[1])  . ")<br />\n";
       return false;
     }
