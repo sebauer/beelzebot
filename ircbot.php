@@ -25,8 +25,10 @@ sendCommand("USER ".USERNAME." 0 0 ".USERNAME, $conn, false);
 sendCommand("NICK ".USERNAME, $conn);
 $connected = false;
 $time = time();
+$packet = null;
 while(!feof($conn)){
     $result = fread($conn, 1024);
+    $insimResult = socket_recv($this->receiver, $packet, 256, 0);
     $part = explode(" ",$result);
     echo $result.PHP_EOL;
 
@@ -54,6 +56,15 @@ while(!feof($conn)){
             echo "Racers online: ".$nrofracers.PHP_EOL;
             sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Racers online on server: $nrofracers", $conn);
         }
+    }
+
+    if ($packet && $packet[1] == pack("C", ISP_STA)) {
+        echo "Received state pack..";
+        $insim->handleStatePackage($packet);
+    }
+    if ($packet && $packet[1] == pack("C", ISP_TINY)) {
+        echo "Received IS_TINY, replying..";
+        $insim->sendTiny($insim->makeTiny(TINY_NONE));
     }
 
     // Work with incoming commands
@@ -151,10 +162,6 @@ while(!feof($conn)){
                 }
                 break;
             case 'showcurrent':
-
-                $insim->getStatePack();
-                sleep(1);
-
                 $output = 'Host: ' . formatHostname($insim->hostname) . ', LFS product: ' . $insim->lfsProduct . ', LFS version: ' . $insim->lfsVersion . ', InSim version: ' . $insim->inSimVersion;
                 sendMessage($output, $op, $conn);
                 $output = 'Num. Racers: ' . $insim->numRacers . ', Num. Connections: ' . $insim->numConnections;

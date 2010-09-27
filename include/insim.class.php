@@ -413,57 +413,61 @@ class InSim {
 
     // check if really a statePack arrived or something else we cant deal with at the moment
     if (!$packet || $packet[1] != pack("C", ISP_STA)) {
-        var_dump(unpack("C", pack("C", ISP_STA)));
-        var_dump(unpack("C", $packet[0]));
-        var_dump(unpack("C", $packet[1]));
-        var_dump(unpack("C", $packet[2]));
-        var_dump(unpack("C", $packet[3]));
-        var_dump(unpack("C", $packet[4]));
       if($this->debug) echo "No StatePack packet received (Packet is of type " . unpack("C", $packet[1])  . ")<br />\n";
       return false;
     }
     else {
-        // Parse version-package
-        // get number of players in race
-        $byte_packed = unpack("c", substr($packet, 12, 1)); // byte
-        $this->numRacers = $byte_packed[1];
-        // get number of connections (including host)
-        $byte_packed = unpack("c", substr($packet, 13, 1)); // byte
-        $this->numConnections = $byte_packed[1];
-        // get status of race (0 - no / 1 - race / 2 - qualifying)
-        $byte_packed = unpack("c", substr($packet, 15, 1)); // byte
-        $this->raceInProgress = $byte_packed[1];
-        // get amount of qualifying minutes
-        $byte_packed = unpack("c", substr($packet, 16, 1)); // byte
-        $this->qualMins = $byte_packed[1];
-        // get amount of laps
-        $laps = ord(substr($packet, 17, 1)); // byte
-        if($laps == 0)
-          $this->raceLaps = 'Practice';
-        else {
-          if($laps < 100) {
-            $this->raceLaps = $laps;
-            $this->raceCurrency = 'Laps';
-          }
-          else if($laps > 99 && $laps <= 190) {
-            $this->raceLaps = ($laps-100) * 10 + 100;
-            $this->raceCurrency = 'Laps';
-          }
-          else {
-            $this->raceLaps = $laps - 190;
-            $this->raceCurrency = 'Hours';
-          }
-        }
-        // get track name
-        $this->track = trim(substr($packet, 20, 6)); // char
-        // get weather info
-        $byte_packed = unpack("c", substr($packet, 26, 1)); // byte
-        $this->weather = $byte_packed[1];
-        // get wind info
-        $byte_packed = unpack("c", substr($packet, 27, 1)); // byte
-        $this->wind = $byte_packed[1];
+      $this->handleStatePackage($packet);
       return true;
     }
+  }
+
+  function sendTiny($packet){
+    if($this->debug) echo "Sending Tiny..\n";
+    fwrite($this->client, $packet, strlen($packet));
+  }
+
+  function handleStatePackage($packet){
+    // Parse version-package
+    // get number of players in race
+    $byte_packed = unpack("c", substr($packet, 12, 1)); // byte
+    $this->numRacers = $byte_packed[1];
+    // get number of connections (including host)
+    $byte_packed = unpack("c", substr($packet, 13, 1)); // byte
+    $this->numConnections = $byte_packed[1];
+    // get status of race (0 - no / 1 - race / 2 - qualifying)
+    $byte_packed = unpack("c", substr($packet, 15, 1)); // byte
+    $this->raceInProgress = $byte_packed[1];
+    // get amount of qualifying minutes
+    $byte_packed = unpack("c", substr($packet, 16, 1)); // byte
+    $this->qualMins = $byte_packed[1];
+    // get amount of laps
+    $laps = ord(substr($packet, 17, 1)); // byte
+    if($laps == 0)
+      $this->raceLaps = 'Practice';
+    else {
+      if($laps < 100) {
+        $this->raceLaps = $laps;
+        $this->raceCurrency = 'Laps';
+      }
+      else if($laps > 99 && $laps <= 190) {
+        $this->raceLaps = ($laps-100) * 10 + 100;
+        $this->raceCurrency = 'Laps';
+      }
+      else {
+        $this->raceLaps = $laps - 190;
+        $this->raceCurrency = 'Hours';
+      }
+    }
+    // get track name
+    $this->track = trim(substr($packet, 20, 6)); // char
+    // get weather info
+    $byte_packed = unpack("c", substr($packet, 26, 1)); // byte
+    $this->weather = $byte_packed[1];
+    // get wind info
+    $byte_packed = unpack("c", substr($packet, 27, 1)); // byte
+    $this->wind = $byte_packed[1];
+  return true;
   }
 
   /**
