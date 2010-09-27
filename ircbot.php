@@ -57,7 +57,7 @@ while(!feof($conn)){
         $op = $op[0];
         $command = explode(' ', $command);
         switch(strtolower($command[0])){
-            case 'createRandCombo':
+            case 'createcombo':
                 if($command[1] == ''){
                     sendMessage('No password given!', $op, $conn);
                     break;
@@ -72,7 +72,7 @@ while(!feof($conn)){
                     sendMessage($resultLine, CHANNEL, $conn);
                 }
                 break;
-            case 'rebuildCombo':
+            case 'rebuildcombo':
                 if($command[1] == ''){
                     sendMessage('No password given!', $op, $conn);
                     break;
