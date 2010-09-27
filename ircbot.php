@@ -26,6 +26,7 @@ sendCommand("NICK ".USERNAME, $conn);
 $connected = false;
 $time = time();
 $packet = null;
+socket_set_nonblock($insim->receiver);
 while(!feof($conn)){
     $result = fread($conn, 1024);
     $packet = socket_read($insim->receiver, 256);
