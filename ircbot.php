@@ -46,6 +46,25 @@ while(!feof($conn)){
             sendCommand("TOPIC #octrin :Octrin Racing - Racers online on server: $nrofracers", $conn);
         }
     }
+
+    // Work with incoming commands
+    if(strpos($result, "PRIVMSG ".USERNAME)!==false){
+
+        $command = explode(':', $result);
+        $command = $command[2];
+        $op = explode('!', $command[1]);
+        $op = $op[0];
+        switch(strotolower($command)){
+            case 'createRandCombo':
+                break;
+            default:
+                sendMessage('Unknown command!', $op, $conn);
+        }
+    }
+}
+
+function sendMessage($input, $receiver = '#octrin', $conn){
+    sendCommand('PRIVMSG '.$receiver.' :'.$input, $conn);
 }
 
 function sendCommand($input, $conn, $noRead = true){
