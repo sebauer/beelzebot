@@ -50,18 +50,18 @@ while(!feof($conn)){
     // Work with incoming commands
     if(strpos($result, "PRIVMSG ".USERNAME)!==false){
 
-        var_dump($result);
+        $result = str_replace("\n\r", '', $result);
 
-//        $command = explode(':', $result);
-//        $command = $command[2];
-//        $op = explode('!', $command[1]);
-//        $op = $op[0];
-//        switch(strtolower($command)){
-//            case 'createRandCombo':
-//                break;
-//            default:
-//                sendMessage('Unknown command "'.$command.'"!', $op, $conn);
-//        }
+        $split = explode(':', $result);
+        $command = $split[2];
+        $op = explode('!', $split[1]);
+        $op = $op[0];
+        switch(strtolower($command)){
+            case 'createRandCombo':
+                break;
+            default:
+                sendMessage('Unknown command "'.$command.'"!', $op, $conn);
+        }
     }
 }
 
