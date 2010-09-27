@@ -78,8 +78,7 @@ while(!feof($conn)){
                         $pre = true;
                         continue;
                     }
-                    $outputString .= $resultLine."\r\n";
-                    sleep(1);
+                    $outputString .= $resultLine."\020";
                 }
                 sendMessage($outputString, CHANNEL, $conn);
                 break;
@@ -106,8 +105,7 @@ while(!feof($conn)){
                         $pre = true;
                         continue;
                     }
-                    $outputString .= $resultLine."\r\n";
-                    sleep(1);
+                    $outputString .= $resultLine."\020";
                 }
                 sendMessage($outputString, CHANNEL, $conn);
                 break;
