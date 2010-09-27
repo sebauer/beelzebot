@@ -67,7 +67,6 @@ while(!feof($conn)){
                 $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[2].'&password='.$command[1]);
                 $serverResult = explode("\n", $serverResult);
                 $pre = false;
-                $outputString = '';
                 foreach($serverResult as $resultLine){
                     if($resultLine == '</pre>'){
                         break;
@@ -78,9 +77,9 @@ while(!feof($conn)){
                         $pre = true;
                         continue;
                     }
-                    $outputString .= $resultLine."\020";
+                    sendMessage($resultLine, CHANNEL, $conn);
+                    time_nanosleep(0, 500000000);
                 }
-                sendMessage($outputString, CHANNEL, $conn);
                 break;
             case 'rebuildcombo':
                 if($command[1] == ''){
@@ -94,7 +93,6 @@ while(!feof($conn)){
                 $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[2].'&password='.$command[1].'&reset');
                 $serverResult = explode("\n", $serverResult);
                 $pre = false;
-                $outputString = '';
                 foreach($serverResult as $resultLine){
                     if($resultLine == '</pre>'){
                         break;
@@ -105,9 +103,9 @@ while(!feof($conn)){
                         $pre = true;
                         continue;
                     }
-                    $outputString .= $resultLine."\020";
+                    sendMessage($resultLine, CHANNEL, $conn);
+                    time_nanosleep(0, 500000000);
                 }
-                sendMessage($outputString, CHANNEL, $conn);
                 break;
             default:
                 sendMessage('Unknown command "'.$command.'"!', $op, $conn);
