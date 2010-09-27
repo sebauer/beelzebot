@@ -92,7 +92,7 @@ class InSim {
         $showPass .= '*';
         $j++;
       }
-      echo 'connecting to ' . $this->insimIP . ':' . $this->insimPort . ' with password ' . $showPass . '<br />';
+      echo 'connecting to ' . $this->insimIP . ':' . $this->insimPort . ' with password ' . $showPass . '';
     }
 
     // create sender filestream
@@ -101,7 +101,7 @@ class InSim {
     if (!$this->client) {
       die("Error:\nCould not connect to $this->insimIP:$this->insimPort\nError Number: $errno\nError Description: $errstr");
     }
-    if($this->debug) echo "connected!<br />\n";
+    if($this->debug) echo "connected!\n";
     // create receiver filestream
     $this->localport = 30000;
     $this->receiver = false;
@@ -118,7 +118,7 @@ class InSim {
       die("Error:\nCould not bind to $this->localport\nError Number: $errno\nError Description: $errstr");
     }
     if($this->debug)
-      echo "setting local listening port to " . $this->localport . "<br />\n";
+      echo "setting local listening port to " . $this->localport . "\n";
 
     // Make the receiver stream nonblocking to be able to apply timeouts
     socket_set_block($this->receiver);
@@ -180,17 +180,17 @@ class InSim {
   function disconnect ($error = '') {
 
     if(!empty($error)) {
-      echo "FATAL ERROR: " . $error . "<br />\n";
+      echo "FATAL ERROR: " . $error . "\n";
       unset($this->receiver);
       unset($this->client);
     }
-    if($this->debug) echo "Requesting connection to be closed...<br />\n";
+    if($this->debug) echo "Requesting connection to be closed...\n";
     $packet = $this->makeTiny(TINY_CLOSE);
     @fwrite($this->client, $packet, strlen($packet));
     @fclose($this->client);
-    if($this->debug) echo "Connection closed...<br />\n";
+    if($this->debug) echo "Connection closed...\n";
     @socket_close($this->receiver);
-    if($this->debug) echo "Listening socket closed...<br />\n";
+    if($this->debug) echo "Listening socket closed...\n";
   }
 
   /**
@@ -255,7 +255,7 @@ class InSim {
     // Now we request an InSimMulti-Package to get the LfS Hostname (if LfS is in multiplayer mode)
     // To perform the request, we simply send an InSimPack with ID = "ISM" and Value = 0.
     $packet = $this->makeTiny(TINY_ISM);
-    if($this->debug) echo "Sending TINY_ISM packet to receive hostname...<br />\n";
+    if($this->debug) echo "Sending TINY_ISM packet to receive hostname...\n";
     // send packet
     fwrite($this->client, $packet, strlen($packet));
 
@@ -270,7 +270,7 @@ class InSim {
     }
     // check if really a ISM-packet arrived or something else we cant deal with at the moment
     if (!$packet || $packet[1] != pack("C", ISP_ISM)) {
-      echo "No hostname packet received.. (Packet is of type " . unpack("C", $packet[1])  . ")<br />\n";
+      echo "No hostname packet received.. (Packet is of type " . unpack("C", $packet[1])  . ")\n";
       return false;
     }
     // Get LfS connection type: are we connected to a client (0) or a server (1)?
@@ -281,7 +281,7 @@ class InSim {
     // Get LfS Hostname
     $this->hostname = trim(substr($packet, 8, 32));
     if(empty($this->hostname)) {
-      echo "Not in multiplayer mode..<br />\n";
+      echo "Not in multiplayer mode..\n";
       return false;
     }
     else
@@ -309,7 +309,7 @@ class InSim {
     // We only request the Version package if $dontSend is set. This will be done, as an init package
     // can automatically request the version and re-requesting the version would be senseless in this case.
     if($dontSend) {
-      if($this->debug) echo "Sending TINY_VER packet to receive version...<br />\n";
+      if($this->debug) echo "Sending TINY_VER packet to receive version...\n";
 
       $packet = $this->makeTiny(TINY_VER);
       // send packet
@@ -330,7 +330,7 @@ class InSim {
 
     // check if really a version-packet arrived or something else we cant deal with at the moment
     if (!$packet || $packet[1] != pack("C", ISP_VER)) {
-      echo "No version packet received..<br />\n";
+      echo "No version packet received..\n";
       return false;
     }
     else {
@@ -395,13 +395,13 @@ class InSim {
 
     $packet = $this->makeTiny(TINY_SST);
 
-    if($this->debug) echo "Sending TINY_SST packet to receive StatePack...<br />\n";
+    if($this->debug) echo "Sending TINY_SST packet to receive StatePack...\n";
     // send packet
     fwrite($this->client, $packet, strlen($packet));
 
     $packet = false;
 
-    if($this->debug) echo "trying to get StatePack from insim..<br />\n";
+    if($this->debug) echo "trying to get StatePack from insim..\n";
 
     $timeout = time() + 2;
     while (!$packet && time() <= $timeout) {
@@ -413,7 +413,7 @@ class InSim {
 
     // check if really a statePack arrived or something else we cant deal with at the moment
     if (!$packet || $packet[1] != pack("C", ISP_STA)) {
-      if($this->debug) echo "No StatePack packet received (Packet is of type " . unpack("C", $packet[1])  . ")<br />\n";
+      if($this->debug) echo "No StatePack packet received (Packet is of type " . unpack("C", $packet[1])  . ")\n";
       return false;
     }
     else {
@@ -547,7 +547,7 @@ class InSim {
             $packet .= pack("c", 0);
             $packet .= str_pad($string, $maxLen, "\0");
 
-            if($this->debug) echo "sending partial message '" . $string . "'<br />\n";
+            if($this->debug) echo "sending partial message '" . $string . "'\n";
             fwrite($this->client, $packet, strlen($packet)); // Third parameter to make PHP ignore magic_quotes-setting
             $i += strlen($string);
         }
@@ -559,7 +559,7 @@ class InSim {
             $packet .= pack("c", 0);
         $packet .= str_pad($text, $maxLen, "\0");
       // Send packet
-        if($this->debug) echo "sending message '" . $text . "'<br />\n";
+        if($this->debug) echo "sending message '" . $text . "'\n";
       fwrite($this->client, $packet, strlen($packet)); // Third parameter to make PHP ignore magic_quotes-setting";
       }
   }
