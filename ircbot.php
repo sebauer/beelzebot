@@ -174,7 +174,7 @@ while(!feof($conn)){
 
                 break;
             case 'help':
-                if($command[1] != '' && $command[0] != 'help'){
+                if($command[1] != '' && $command[1] != 'help'){
                     switch(strtolower($command[1])){
                         case 'showcurrent':
                             sendMessage('SHOWCURRENT - Usage: /msg '.USERNAME.' SHOWCURRENT', $op, $conn);
