@@ -34,7 +34,9 @@ while(!feof($conn)){
     $result = fread($conn, 1024);
     $packet = socket_read($insim->receiver, 256);
     $part = explode(" ",$result);
-    echo $result.PHP_EOL;
+    if($result != ''){
+        echo $result.PHP_EOL;
+    }
 
     if($part[0] == "PING")
     {
