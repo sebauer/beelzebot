@@ -143,7 +143,7 @@ while(!feof($conn)){
                 sendMessage('Syntax for combo commands: /msg '.USERNAME.' <command> [[<password>] <date>]', $op, $conn);
                 time_nanosleep(0, 500000000);
                 sendMessage('Sample: /msg '.USERNAME.' CREATECOMBO secretpassword TestEvent', $op, $conn);
-                sendMessage('Sample: /msg '.USERNAME.' SHOWCOMB TestEvent', $op, $conn);
+                sendMessage('Sample: /msg '.USERNAME.' SHOWCOMBO TestEvent', $op, $conn);
                 break;
             default:
                 sendMessage('Unknown command "'.$command.'"!', $op, $conn);
