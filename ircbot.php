@@ -66,7 +66,7 @@ while(!feof($conn)){
                     sendMessage('No date param given!', $op, $conn);
                     break;
                 }
-                $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[1].'&password=dasdarfnurich');
+                $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[2].'&password='.$command[1]);
                 $serverResult = explode("\n", $serverResult);
                 foreach($serverResult as $resultLine){
                     sendMessage($resultLine, CHANNEL, $conn);
@@ -81,7 +81,7 @@ while(!feof($conn)){
                     sendMessage('No date param given!', $op, $conn);
                     break;
                 }
-                $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[1].'&password=dasdarfnurich&reset');
+                $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[2].'&password='.$command[1].'&reset');
                 $serverResult = explode("\n", $serverResult);
                 foreach($serverResult as $resultLine){
                     sendMessage($resultLine, CHANNEL, $conn);
