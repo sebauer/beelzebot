@@ -46,6 +46,7 @@ while(!feof($conn)){
             $firstrun = true;
         }
     }
+    /*
     if($connected && (time()-$time)>60*5) {
         $time = time();
 
@@ -59,11 +60,12 @@ while(!feof($conn)){
             echo "Racers online: ".$nrofracers.PHP_EOL;
             sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Racers online on server: $nrofracers", $conn);
         }
-    }
+    }*/
 
     if ($packet && $packet[1] == pack("C", ISP_STA)) {
         echo "Received state pack..".PHP_EOL;
         $insim->handleStatePackage($packet);
+        sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Racers online on server: ".$insim->numRacers, $conn);
     } else if($packet && $packet[1] == pack("C", ISP_TINY)) {
         echo "Received IS_TINY, replying..".PHP_EOL;
         $insim->sendTiny($insim->makeTiny(TINY_NONE));
