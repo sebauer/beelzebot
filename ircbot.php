@@ -5,7 +5,7 @@ define('CHANNEL', '#octbottest');
 include_once('config.php');
 
 echo 'Connecting to tiscali.dk.quakenet.org'.PHP_EOL;
-$conn = fsockopen('tiscali.dk.quakenet.org', 6667);
+$conn = fsockopen('clanserver4u.de.quakenet.org', 6667);
 echo 'Connected'.PHP_EOL;
 
 sendCommand("USER ".USERNAME." 0 0 ".USERNAME, $conn, false);
@@ -22,18 +22,18 @@ while(!feof($conn)){
         $ping = explode(":", $result);
         $reply = $ping[1];
         sendCommand("PONG $reply\n\r", $conn);
-    }
-    if(strpos($result, "MODE ".USERNAME." +i")!==false){
+//    if(strpos($result, "MODE ".USERNAME." +i")!==false){
         if (!$firstrun) {
             sendCommand("JOIN ".CHANNEL."\n\r", $conn);
+            sendCommand("AUTH ".USERNAME." ".PASSWORD, $conn);
             $firstrun = true;
         }
     }
-    if(strpos($result, "JOIN ".CHANNEL)!==false && !$connected){
-        sendCommand("AUTH ".USERNAME." ".PASSWORD, $conn);
+//    if(strpos($result, "JOIN ".CHANNEL)!==false && !$connected){
+//        sendCommand("AUTH ".USERNAME." ".PASSWORD, $conn);
 //        sendCommand("PRIVMSG #octrin :lolol i'm in", $conn);
-        $connected = true;
-    }
+//        $connected = true;
+//    }
     if($connected && (time()-$time)>60*5) {
         $time = time();
 
@@ -52,7 +52,9 @@ while(!feof($conn)){
     // Work with incoming commands
     if(strpos($result, "PRIVMSG ".USERNAME)!==false){
 
-        str_replace(PHP_EOL, '', $result);
+        var_dump(strpos($result, "\r"));
+        $result = str_replace(array("\n","\r"), '', $result);
+        var_dump(strpos($result, "\n"));
 
         $split = explode(':', $result);
         $command = $split[2];
