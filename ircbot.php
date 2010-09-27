@@ -1,11 +1,12 @@
 <?php
 
 define('CHANNEL', '#octbottest');
+define('SERVER', 'clanserver4u.de.quakenet.org');
 
 include_once('config.php');
 
-echo 'Connecting to tiscali.dk.quakenet.org'.PHP_EOL;
-$conn = fsockopen('clanserver4u.de.quakenet.org', 6667);
+echo 'Connecting to '.SERVER.PHP_EOL;
+$conn = fsockopen(SERVER, 6667);
 echo 'Connected'.PHP_EOL;
 
 sendCommand("USER ".USERNAME." 0 0 ".USERNAME, $conn, false);
@@ -22,18 +23,12 @@ while(!feof($conn)){
         $ping = explode(":", $result);
         $reply = $ping[1];
         sendCommand("PONG $reply\n\r", $conn);
-//    if(strpos($result, "MODE ".USERNAME." +i")!==false){
         if (!$firstrun) {
             sendCommand("JOIN ".CHANNEL."\n\r", $conn);
             sendCommand("AUTH ".USERNAME." ".PASSWORD, $conn);
             $firstrun = true;
         }
     }
-//    if(strpos($result, "JOIN ".CHANNEL)!==false && !$connected){
-//        sendCommand("AUTH ".USERNAME." ".PASSWORD, $conn);
-//        sendCommand("PRIVMSG #octrin :lolol i'm in", $conn);
-//        $connected = true;
-//    }
     if($connected && (time()-$time)>60*5) {
         $time = time();
 
@@ -60,8 +55,37 @@ while(!feof($conn)){
         $command = $split[2];
         $op = explode('!', $split[1]);
         $op = $op[0];
-        switch(strtolower($command)){
+        $command = explode(' ', $command);
+        switch(strtolower($command[0])){
             case 'createRandCombo':
+                if($command[1] == ''){
+                    sendMessage('No password given!', $op, $conn);
+                    break;
+                }
+                if($command[2] == ''){
+                    sendMessage('No date param given!', $op, $conn);
+                    break;
+                }
+                $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[1].'&password=dasdarfnurich');
+                $serverResult = explode("\n", $serverResult);
+                foreach($serverResult as $resultLine){
+                    sendMessage($resultLine, CHANNEL, $conn);
+                }
+                break;
+            case 'rebuildCombo':
+                if($command[1] == ''){
+                    sendMessage('No password given!', $op, $conn);
+                    break;
+                }
+                if($command[2] == ''){
+                    sendMessage('No date param given!', $op, $conn);
+                    break;
+                }
+                $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[1].'&password=dasdarfnurich&reset');
+                $serverResult = explode("\n", $serverResult);
+                foreach($serverResult as $resultLine){
+                    sendMessage($resultLine, CHANNEL, $conn);
+                }
                 break;
             default:
                 sendMessage('Unknown command "'.$command.'"!', $op, $conn);
