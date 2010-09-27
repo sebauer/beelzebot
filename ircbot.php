@@ -20,6 +20,7 @@ echo 'InSim connected!'.PHP_EOL;
 
 echo 'Connecting to IRC Server '.SERVER.PHP_EOL;
 $conn = fsockopen(SERVER, 6667);
+stream_set_timeout($conn, 3);
 echo 'Connected'.PHP_EOL;
 
 sendCommand("USER ".USERNAME." 0 0 ".USERNAME, $conn, false);
@@ -33,7 +34,7 @@ socket_set_nonblock($insim->receiver);
 
 while(!feof($conn)){
     $result = fread($conn, 1024);
-    $packet = socket_read($insim->receiver, 256);
+    $packet = socket_read($insim->receiver, 1024);
     $part = explode(" ",$result);
     if($result != ''){
         echo $result.PHP_EOL;
