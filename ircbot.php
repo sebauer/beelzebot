@@ -1,4 +1,5 @@
 <?php
+set_time_limit (0);
 
 include_once('config.php');
 require('include/insim.class.php');
@@ -27,7 +28,7 @@ $connected = false;
 $time = time();
 $packet = null;
 
-socket_set_nonblock($insim->receiver);
+//socket_set_nonblock($insim->receiver);
 stream_set_blocking($conn, 0);
 
 while(!feof($conn)){
