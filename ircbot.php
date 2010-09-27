@@ -273,6 +273,14 @@ while (!feof($conn)) {
 				sendMessage($op.' [toLFS]: '.$text, CHANNEL, $conn);
 				$insim->sendTextMessage($op.'[IRC]: '.$text);
 				break;
+			case 'quit':
+				if($command[1]!=PASSWORD){
+					sendMessage('Wrong password given!', $op, $conn);
+					break;
+				}
+				sendCommand('QUIT', $conn);
+				$insim->sendTextMessage($op.'[IRC]: '.$text);
+				break;
 			case 'help':
 				if($command[1] != '' && $command[1] != 'help'){
 					switch(strtolower($command[1])){
