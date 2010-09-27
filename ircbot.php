@@ -1,6 +1,6 @@
 <?php
 
-define('CHANNEL', '#octbottest');
+define('CHANNEL', '#octrin');
 define('SERVER', 'clanserver4u.de.quakenet.org');
 
 include_once('config.php');
@@ -79,7 +79,7 @@ while(!feof($conn)){
                     }
                     if($resultLine=='')continue;
                     sendMessage($resultLine, CHANNEL, $conn);
-                    if($count%3==0) {
+                    if($count%4==0) {
                         time_nanosleep(0, 500000000);
                     }
                 }
@@ -108,7 +108,7 @@ while(!feof($conn)){
                     }
                     if($resultLine=='')continue;
                     sendMessage($resultLine, CHANNEL, $conn);
-                    if($count%3==0) {
+                    if($count%4==0) {
                         time_nanosleep(0, 500000000);
                     }
                 }
@@ -132,18 +132,18 @@ while(!feof($conn)){
                         continue;
                     }
                     if($resultLine=='')continue;
-                    sendMessage($resultLine, CHANNEL, $conn);
-                    if($count%3==0) {
+                    sendMessage($resultLine, $op, $conn);
+                    if($count%4==0) {
                         time_nanosleep(0, 500000000);
                     }
                 }
                 break;
             case 'help':
                 sendMessage('Available commands: HELP, CREATECOMBO, REBUILDCOMBO, SHOWCOMBO', $op, $conn);
-                sendMessage('Syntax for combo commands: /msg octbot <command> [[<password>] <date>]', $op, $conn);
+                sendMessage('Syntax for combo commands: /msg '.USERNAME.' <command> [[<password>] <date>]', $op, $conn);
                 time_nanosleep(0, 500000000);
-                sendMessage('Sample: /msg octbot CREATECOMBO secretpassword TestEvent', $op, $conn);
-                sendMessage('Sample: /msg octbot SHOWCOMB TestEvent', $op, $conn);
+                sendMessage('Sample: /msg '.USERNAME.' CREATECOMBO secretpassword TestEvent', $op, $conn);
+                sendMessage('Sample: /msg '.USERNAME.' SHOWCOMB TestEvent', $op, $conn);
                 break;
             default:
                 sendMessage('Unknown command "'.$command.'"!', $op, $conn);
