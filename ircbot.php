@@ -152,9 +152,9 @@ while(!feof($conn)){
                 break;
             case 'showcurrent':
 
-                $output = 'LFS product: ' . $insim->lfsProduct . ', LFS version: ' . $insim->lfsVersion . ', InSim version: ' . $insim->inSimVersion;
+                $output = 'Host: ' . formatHostname($insim->hostname) . 'LFS product: ' . $insim->lfsProduct . ', LFS version: ' . $insim->lfsVersion . ', InSim version: ' . $insim->inSimVersion;
+                $output = 'Num. Racers: ' . $insim->numRacers . ', Num. Connections: ' . $insim->numConnections;
                 sendMessage($output, $op, $conn);
-                $output = 'Host: ' . formatHostname($insim->hostname) . ', Num. Racers: ' . $insim->numRacers . ', Num. Connections: ' . $insim->numConnections;
                 sendMessage($output, $op, $conn);
                 switch($insim->raceInProgress) {
                 case 0:
@@ -174,7 +174,31 @@ while(!feof($conn)){
 
                 break;
             case 'help':
-                sendMessage('Available commands: HELP, CREATECOMBO, REBUILDCOMBO, SHOWCOMBO', $op, $conn);
+                if($command[1] != '' && $command[0] != 'help'){
+                    switch(strtolower($command[1])){
+                        case 'showcurrent':
+                            sendMessage('SHOWCURRENT - Usage: /msg '.USERNAME.' SHOWCURRENT', $op, $conn);
+                            sendMessage('Shows the current server status', $op, $conn);
+                        break;
+                        case 'createcombo':
+                            sendMessage('CREATECOMBO - Usage: /msg '.USERNAME.' CREATECOMBO <password> <date>', $op, $conn);
+                            sendMessage('Creates a new combo for the given date', $op, $conn);
+                        break;
+                        case 'rebuildcombo':
+                            sendMessage('REBUILDCOMBO - Usage: /msg '.USERNAME.' REBUILDCOMBO <password> <date>', $op, $conn);
+                            sendMessage('Resets the combo for the given date and creates a new one', $op, $conn);
+                        break;
+                        case 'showcombo':
+                            sendMessage('SHOWCOMBO - Usage: /msg '.USERNAME.' SHOWCOMBO <date>', $op, $conn);
+                            sendMessage('Shows the combo for the given date', $op, $conn);
+                        break;
+                        default:
+                            sendMessage('Unknown command "'.$command[1].'"!', $op, $conn);
+                            break;
+                    }
+                }
+                sendMessage('Available commands: HELP, CREATECOMBO, REBUILDCOMBO, SHOWCOMBO, SHOWCURRENT', $op, $conn);
+                sendMessage('Execute HELP <command> to get help on a specific command', $op, $conn);
                 sendMessage('Syntax for combo commands: /msg '.USERNAME.' <command> [[<password>] <date>]', $op, $conn);
                 time_nanosleep(0, 500000000);
                 sendMessage('Sample: /msg '.USERNAME.' CREATECOMBO secretpassword TestEvent', $op, $conn);

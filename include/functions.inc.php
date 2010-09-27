@@ -11,7 +11,7 @@
 function formatHostname($hostname)
 {
   if(strstr($hostname, "^")==FALSE) // If no ^ is found for color changing, just use the normal hostname
-    $host = "<font color=\"#cccccc\">" . $hostname . "</font>";
+    $host = $hostname;
   else
   {
     $hostname_split = explode("^", $hostname);
