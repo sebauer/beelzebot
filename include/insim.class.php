@@ -143,7 +143,7 @@ class InSim {
     $packet .= pack("S", 2+4+32);             // Connection Flags - see InSim.txt
 
     $packet .= pack("c", intval(0));          // Sp0
-    $packet .= pack("c", intval(0));          // Prefix
+    $packet .= pack("c", '!');          // Prefix
     $packet .= pack("S", 1);                  // NodeSecs - time between packages
 
      if (strlen($this->adminPW) > 16) {
