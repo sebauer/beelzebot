@@ -2,7 +2,19 @@
 
 include_once('config.php');
 
-echo 'Connecting to '.SERVER.PHP_EOL;
+define('INSIM_SERVER', 'root1.hpr-network.com');
+define('INSIM_PORT', 9000);
+define('INSIM_PASS', '20octrin10');
+
+echo 'Connecting to InSim '.INSIM_SERVER.':'.INSIM_PORT.PHP_EOL;
+
+$insim = new InSim();
+$insim->debug(0);
+
+$insim->isi(INSIM_SERVER, INSIM_PORT, INSIM_PASS);
+echo 'InSim connected!'.PHP_EOL;
+
+echo 'Connecting to IRC Server '.SERVER.PHP_EOL;
 $conn = fsockopen(SERVER, 6667);
 echo 'Connected'.PHP_EOL;
 
@@ -134,6 +146,8 @@ while(!feof($conn)){
                         time_nanosleep(0, 500000000);
                     }
                 }
+                break;
+            case 'showcurrent':
                 break;
             case 'help':
                 sendMessage('Available commands: HELP, CREATECOMBO, REBUILDCOMBO, SHOWCOMBO', $op, $conn);
