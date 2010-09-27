@@ -65,9 +65,10 @@ while(!feof($conn)){
     } else if($packet && $packet[1] == pack("C", ISP_TINY)) {
         echo "Received IS_TINY, replying..";
         $insim->sendTiny($insim->makeTiny(TINY_NONE));
-    } else {
+    } else if($packet){
         echo "Received packet of type ".unpack('C', $packet[1]);
     }
+    $packet = null;
 
     // Work with incoming commands
     if(strpos($result, "PRIVMSG ".USERNAME)!==false){
