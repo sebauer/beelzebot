@@ -413,6 +413,7 @@ class InSim {
 
     // check if really a statePack arrived or something else we cant deal with at the moment
     if (!$packet || $packet[1] != pack("C", ISP_STA)) {
+        var_dump(unpack("C", pack("C", ISP_STA)));
         var_dump(unpack("C", $packet[0]));
         var_dump(unpack("C", $packet[1]));
         var_dump(unpack("C", $packet[2]));
