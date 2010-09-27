@@ -299,7 +299,8 @@ while (!feof($conn)) {
 							break;
 					}
 				} else {
-					sendMessage('Available commands: HELP, CREATECOMBO, REBUILDCOMBO, SHOWCOMBO, SHOWCURRENT', $op, $conn);
+					sendMessage('Octrin LFS/IRC Bot Revision .'._REVISION, $op, $conn);
+					sendMessage('Available commands: HELP, CREATECOMBO, REBUILDCOMBO, SHOWCOMBO, SHOWCURRENT, LFS', $op, $conn);
 					sendMessage('Execute HELP <command> to get help on a specific command', $op, $conn);
 					sendMessage('Syntax for combo commands: /msg '.USERNAME.' <command> [[<password>] <date>]', $op, $conn);
 					time_nanosleep(0, 500000000);
