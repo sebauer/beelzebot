@@ -26,7 +26,10 @@ sendCommand("NICK ".USERNAME, $conn);
 $connected = false;
 $time = time();
 $packet = null;
+
 socket_set_nonblock($insim->receiver);
+stream_set_blocking($conn, 0);
+
 while(!feof($conn)){
     $result = fread($conn, 1024);
     $packet = socket_read($insim->receiver, 256);
@@ -60,13 +63,13 @@ while(!feof($conn)){
     }
 
     if ($packet && $packet[1] == pack("C", ISP_STA)) {
-        echo "Received state pack..";
+        echo "Received state pack..".PHP_EOL;
         $insim->handleStatePackage($packet);
     } else if($packet && $packet[1] == pack("C", ISP_TINY)) {
-        echo "Received IS_TINY, replying..";
+        echo "Received IS_TINY, replying..".PHP_EOL;
         $insim->sendTiny($insim->makeTiny(TINY_NONE));
     } else if($packet){
-        echo "Received packet of type ".unpack('C', $packet[1]);
+        echo "Received packet of type ".unpack('C', $packet[1]).PHP_EOL;
     }
     $packet = null;
 
