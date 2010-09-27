@@ -68,8 +68,16 @@ while(!feof($conn)){
                 }
                 $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[2].'&password='.$command[1]);
                 $serverResult = explode("\n", $serverResult);
+                $pre = false;
                 foreach($serverResult as $resultLine){
+                    if(!$pre && $resultLine!='<pre>') {
+                        continue;
+                    } else if($resultLine == '<pre>'){
+                        $pre = true;
+                        continue;
+                    }
                     sendMessage($resultLine, CHANNEL, $conn);
+                    sleep(1);
                 }
                 break;
             case 'rebuildcombo':
@@ -83,8 +91,16 @@ while(!feof($conn)){
                 }
                 $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$command[2].'&password='.$command[1].'&reset');
                 $serverResult = explode("\n", $serverResult);
+                $pre = false;
                 foreach($serverResult as $resultLine){
+                    if(!$pre && $resultLine!='<pre>') {
+                        continue;
+                    } else if($resultLine == '<pre>'){
+                        $pre = true;
+                        continue;
+                    }
                     sendMessage($resultLine, CHANNEL, $conn);
+                    sleep(1);
                 }
                 break;
             default:
