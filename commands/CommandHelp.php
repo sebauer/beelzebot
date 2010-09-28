@@ -54,7 +54,7 @@ class CommandHelp extends aCommand {
         $commands = $bot->getCommands();
         $commandList = array( );
         foreach($commands as $commandString => $command) {
-            $commandList[] = str_replace('COMMAND', '', $commandString);
+            $commandList[] = preg_replace('/^COMMAND/', '', $commandString, 1);
         }
         $bot->sendMessage(implode(', ', $commandList), $sender);
         $bot->sendMessage('To get help on a specific command, use HELP:', $sender);

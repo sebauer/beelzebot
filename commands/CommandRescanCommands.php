@@ -43,7 +43,7 @@ class CommandRescanCommands extends aCommand {
 
 		$commandList = array( );
 		foreach($commands as $command){
-			$commandList[] = strtoupper(str_replace('Command', '', get_class($command)));
+			$commandList[] = strtoupper(preg_replace('/^Command/', '', get_class($command)));
 			$bot->addCommand($command);
 		}
 
