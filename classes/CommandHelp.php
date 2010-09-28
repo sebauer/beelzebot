@@ -26,7 +26,14 @@ class CommandHelp extends aCommand {
     }
 
     public function getHelp(Bot $bot, $sender){
-        $bot->sendMessage('Shows help for a command', $sender);
+        $bot->sendMessage('Available Commands:', $sender);
+        $commands = $bot->getCommands();
+        $commandList = array( );
+        foreach($commands as $commandString => $command) {
+            $commandList[] = str_replace('COMMAND', '', $commandString);
+        }
+        $bot->sendMessage(implode(', ', $commandList), $sender);
+        $bot->sendMessage('To get help on a specific command, use HELP:', $sender);
         $bot->sendMessage('HELP - Usage: /msg '.USERNAME.' HELP <command>', $sender);
     }
 }

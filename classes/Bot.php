@@ -45,6 +45,10 @@ class Bot {
         return $this->_commands[$commandName];
     }
 
+    public function getCommands(){
+        return $this->_commands;
+    }
+
     public function run(){
         $this->log('Connecting to InSim '.INSIM_SERVER.':'.INSIM_PORT);
 
