@@ -13,6 +13,8 @@ class InSimResponderStat extends aInSimResponder {
         if($insim->numConnections==1){
             $bot->setServerIdle(true);
         }
-        $bot->sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Users online on server: ".intval($insim->numConnections - 1));
+        $connCount = intval($insim->numConnections - 1);
+        if($connCount < 0) $connCount = 0;
+        $bot->sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Users online on server: ".$connCount);
     }
 }
