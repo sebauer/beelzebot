@@ -25,41 +25,21 @@
  * @license MIT
  */
 
+class InSimResponderPing extends aInSimResponder {
 
-abstract class aCommand implements iCommand {
-
-    static public function extractSender($inputLine){
-        $result = str_replace(array("\n","\r"), '', $inputLine);
-        $split = explode(':', $result);
-        $op = explode('!', $split[1]);;
-        return $op[0];
+    public function isResponsible($packet){
+        if($packet[1] != pack("C", ISP_TINY)) return false;
+        return true;
     }
 
-    static public function extractCommand($inputLine){
-        $splitByColon = explode(':', $inputLine);
-        $command = explode(' ', $splitByColon[2]);
-        $command = $command[0];
-        return $command;
-    }
+    public function handleCall($packet, InSim $insim, Bot $bot){
 
-    static public function extractText($inputLine){
-        $splitByColon = explode(':', $inputLine);
-        $text = preg_replace("/^\!?[a-zA-Z]+\s?/", '', $splitByColon[2]);
-        return $text;
-    }
-
-    final public function call($inputLine, InSim $insim, Bot $bot){
-
-        $sender = $this->extractSender($inputLine);
-
-        $inputLine = str_replace(array("\n","\r"), '', $inputLine);
-
-        // Split string and extract command
-        $command = strtoupper($this->extractCommand($inputLine));
-        $text = $this->extractText($inputLine);
-
-        if(!$this->isResponsible($command)) return;
-
-        return $this->handleCall($command, $text, $sender, $insim, $bot);
+        if($bot->getPacketCount() <= 1){
+            $bot->log("No activity since last InSim PING, going idle...");
+            $bot->setServerIdle(true);
+        }
+        $bot->resetPacketCount();
+        $bot->log("Received IS_TINY, replying..");
+        $insim->sendTiny($insim->makeTiny(TINY_NONE));
     }
 }

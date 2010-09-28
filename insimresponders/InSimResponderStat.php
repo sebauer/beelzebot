@@ -25,41 +25,22 @@
  * @license MIT
  */
 
+class InSimResponderStat extends aInSimResponder {
 
-abstract class aCommand implements iCommand {
-
-    static public function extractSender($inputLine){
-        $result = str_replace(array("\n","\r"), '', $inputLine);
-        $split = explode(':', $result);
-        $op = explode('!', $split[1]);;
-        return $op[0];
+    public function isResponsible($packet){
+        if($packet[1] != pack("C", ISP_STA)) return false;
+        return true;
     }
 
-    static public function extractCommand($inputLine){
-        $splitByColon = explode(':', $inputLine);
-        $command = explode(' ', $splitByColon[2]);
-        $command = $command[0];
-        return $command;
-    }
+    public function handleCall($packet, InSim $insim, Bot $bot){
+        $bot->log("Received state pack..");
+        $insim->handleStatePackage($packet);
 
-    static public function extractText($inputLine){
-        $splitByColon = explode(':', $inputLine);
-        $text = preg_replace("/^\!?[a-zA-Z]+\s?/", '', $splitByColon[2]);
-        return $text;
-    }
-
-    final public function call($inputLine, InSim $insim, Bot $bot){
-
-        $sender = $this->extractSender($inputLine);
-
-        $inputLine = str_replace(array("\n","\r"), '', $inputLine);
-
-        // Split string and extract command
-        $command = strtoupper($this->extractCommand($inputLine));
-        $text = $this->extractText($inputLine);
-
-        if(!$this->isResponsible($command)) return;
-
-        return $this->handleCall($command, $text, $sender, $insim, $bot);
+        if($insim->numConnections==1){
+            $bot->setServerIdle(true);
+        }
+        $connCount = intval($insim->numConnections - 1);
+        if($connCount < 0) $connCount = 0;
+        $bot->sendCommand("TOPIC ".CHANNEL." :".sprintf(TOPIC_TEMPLATE, $connCount));
     }
 }

@@ -1,11 +1,34 @@
 <?php
 
 /**
+ * Copyright (c) 2010 Sebastian Bauer
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @author Sebastian Bauer <sbauer@gjl-network.net>
+ * @license MIT
+ */
+
+
+/**
  * This file contains all defines for InSim packages, they can be used as enum
  * and are required by the InSim class.
- *
- * @version $Id$
- * @copyright 2007
  */
 
 
@@ -71,6 +94,6 @@ define('ISP_REO', 36);	 		// 36 - both ways		: reorder (info or instruction)
 define('ISP_NLP', 37);	 		// 37 - info			: node and lap packet
 define('ISP_MCI', 38);	 		// 38 - info			: multi car info
 define('ISP_MSX', 39);	 		// 39 - instruction 	: type message (for long messages)
-define('ISP_MSL', 40);	 		// 40 - instruction		: message to local computer	
+define('ISP_MSL', 40);	 		// 40 - instruction		: message to local computer
 
 ?>

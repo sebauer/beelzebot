@@ -1,30 +1,42 @@
 <?php
 
 /**
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
+ * Copyright (c) 2010 Sebastian Bauer
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- *   @author Sebastian Bauer <sbauer@gjl-network.net>
- *   @license GPL
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @author Sebastian Bauer <sbauer@gjl-network.net>
+ * @license MIT
  */
-  function class_autoloader( $class )
-  {
+function class_autoloader( $class )
+{
     $file = 'classes'.DIRECTORY_SEPARATOR.$class.'.php';
-    if ( file_exists( $file ) ) {
-      require_once $file;
+    if(preg_match('/^Command.+$/', $class)!=0){
+        $file = 'commands'.DIRECTORY_SEPARATOR.$class.'.php';
+    } else if(preg_match('/^InSimResponder.+$/', $class)!=0){
+        $file = 'insimresponders'.DIRECTORY_SEPARATOR.$class.'.php';
     }
-  }
+    if ( file_exists( $file ) ) {
+        require_once $file;
+    }
+}
 
-  spl_autoload_register( 'class_autoloader' );
+spl_autoload_register( 'class_autoloader' );
 
 ?>
