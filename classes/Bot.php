@@ -166,7 +166,7 @@ class Bot {
                         break;
                     }
                 }
-                if($returnVal == null){
+                if(is_null($returnVal)){
                     $this->log('No handler for command found!');
                     $this->sendMessage('Unknown command "'.str_replace(array("\n","\r"), '', aCommand::extractCommand($result)).'"', aCommand::extractSender($result));
                 }
