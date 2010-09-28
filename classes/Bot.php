@@ -81,7 +81,7 @@ class Bot {
         $insim->debug(1);
 
         $insim->isi(INSIM_SERVER, INSIM_PORT, INSIM_PASS);
-        $this->log('InSim connected!'.PHP_EOL);
+        $this->log('InSim connected!');
 
         $this->log('Connecting to IRC Server');
         $this->_conn = fsockopen(SERVER, IRC_PORT);
@@ -106,6 +106,7 @@ class Bot {
         while (!feof($this->_conn)) {
             $result = fread($this->_conn, 1024);
             $packet = null;
+
             if(!$this->_serverIdle) {
                 $resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_WAITALL);
             } else {
@@ -114,12 +115,12 @@ class Bot {
             if(time() > $activityTimeout){
                 $activityTimeout = time()+30;
                 $this->log("Checking server idle status via LFSWorld..");
-                $statFile = file_get_contents("http://www.lfsworld.net/hoststatus/?h=".urlencode(LFSHOST));
+//                $statFile = file_get_contents("http://www.lfsworld.net/hoststatus/?h=".urlencode(LFSHOST));
                 if(strpos($statFile, '0 / ')!==false){
-                    $serverActive = false;
+                    $this->_serverIdle = true;
                     $this->log("Server currently idle...");
                 } else {
-                    $serverActive = true;
+                    $this->_serverIdle = false;
                     $this->log("Server seems to be active...");
                 }
             }
@@ -149,11 +150,11 @@ class Bot {
 
             // Work with incoming InSim Packets
             if($packet){
-
                 $this->log("Processing packet..");
                 foreach($this->_responder as $responder){
                     $responder->call($packet, $insim, $this);
                 }
+            } else {
             }
 
             // Work with incoming commands
@@ -184,7 +185,7 @@ class Bot {
         $this->log($input);
         fwrite($this->_conn, $input."\n\r");
         if(!$noRead) {
-            $return = fread($this->_conn,1024);
+            $return = fread($this->_conn, 1024);
             $this->log($return);
         }
         return $return;
