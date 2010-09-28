@@ -23,41 +23,32 @@
  * @author Sebastian Bauer <sbauer@gjl-network.net>
  * @license MIT
  */
-
-class CommandHelp extends aCommand {
+/**
+ * CommandRestart
+ *
+ * @author sbauer
+ *
+ */
+class CommandRestart extends aCommand {
     public function isResponsible($command){
         // Not responsible for this type of command
-        if($command != 'HELP') return false;
+        if($command != 'RESTART') return false;
         return true;
     }
 
     public function handleCall($command, $text, $sender, InSim $insim, Bot $bot){
-        $helpCmd = strtoupper(reset(explode(' ', $text)));
-
-        $bot->log('Looking for help about '.$helpCmd);
-
-        if($helpCmd == ''){
-            $this->getHelp($bot, $sender);
-            return true;
-        }
-        $commandClass = $bot->getCommand($helpCmd);
-        if(!$commandClass){
-            $bot->sendMessage('Unknown command "'.$helpCmd.'"', $sender);
+        if($text!=INSIM_PASS){
+            $bot->sendMessage('Wrong InSim password provided!', $sender);
             return false;
         }
-        $commandClass->getHelp($bot, $sender);
+        // Send message to LFS
+        $insim->reInit();
+        $bot->sendMessage(' **** LFS server restart triggered by '.$sender. ' **** ', CHANNEL);
         return true;
     }
 
     public function getHelp(Bot $bot, $sender){
-        $bot->sendMessage('Available Commands:', $sender);
-        $commands = $bot->getCommands();
-        $commandList = array( );
-        foreach($commands as $commandString => $command) {
-            $commandList[] = str_replace('COMMAND', '', $commandString);
-        }
-        $bot->sendMessage(implode(', ', $commandList), $sender);
-        $bot->sendMessage('To get help on a specific command, use HELP:', $sender);
-        $bot->sendMessage('HELP - Usage: /msg '.USERNAME.' HELP <command>', $sender);
+        $bot->sendMessage('Restarts the LFS Server', $sender);
+        $bot->sendMessage('RESTART - Usage: /msg '.USERNAME.' RESTART <server_admin_password>', $sender);
     }
 }
