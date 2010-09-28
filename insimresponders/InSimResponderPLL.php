@@ -38,6 +38,7 @@ class InSimResponderPLL extends aInSimResponder {
         if($insim->numConnections==2){
             $bot->log("Last player left, server now idle..");
             $bot->setServerIdle(true);
+            $bot->sendCommand("TOPIC ".CHANNEL." :".sprintf(TOPIC_TEMPLATE, 0).$bot->getTopic());
         }
     }
 }
