@@ -26,8 +26,6 @@
 
 class CommandTopic extends aCommand {
 	
-	private $friendRequestCount = array( );
-	
     public function isResponsible($command){
         // Not responsible for this type of command
         if($command != 'TOPIC' && $command != '!TOPIC') return false;
