@@ -143,8 +143,9 @@ class Bot {
                 $connCount = intval($insim->numConnections - 1);
                 if($connCount < 0) $connCount = 0;
                 $this->sendCommand("TOPIC ".CHANNEL." :".sprintf(TOPIC_TEMPLATE, $connCount));
-                $this->sendMessage('**** Octrin LFS/IRC Bot starting its work.. - Revion .'._REVISION.' ****', CHANNEL);
-                $this->sendMessage('**** Get ready to rumble! ****', CHANNEL);
+                $this->sendMessage(' **** Beelzebot, the Octrin LFS/IRC Bot, is starting its work.. - Revion .'._REVISION.' **** ', CHANNEL);
+                $this->sendMessage(' **** http://code.google.com/p/lfs-irc **** ', CHANNEL);
+                $this->sendMessage(' **** Hell awaits! **** ', CHANNEL);
                 $firstrun = true;
             }
 

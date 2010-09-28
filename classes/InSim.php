@@ -176,7 +176,7 @@ class InSim {
       $this->adminPW = substr($this->adminPW, 0, 16);      // Cut down adminpw if too long
     }
     $packet .= str_pad($this->adminPW, 16, "\0");    // Admin-Password if set in LFS host options
-    $packet .= str_pad("OctrinIRCBot", 16, "\0");    // Admin-Password if set in LFS host options
+    $packet .= str_pad("BeelzebotIRC2LFS", 16, "\0");    // Admin-Password if set in LFS host options
 
     // Send packet
     fwrite($this->client, $packet, strlen($packet)); // Third parameter to make PHP ignore magic_quotes-setting

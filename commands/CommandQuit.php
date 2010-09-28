@@ -36,7 +36,7 @@ class CommandQuit extends aCommand {
             $bot->sendMessage('Wrong password given!', $sender);
             return false;
         }
-        $insim->sendTextMessage('IRC Bot is now leaving.. Bye, bye!');
+        $insim->sendTextMessage('Beelzebot is now leaving.. Bye, bye!');
         $bot->sendCommand('QUIT');
         return true;
     }
