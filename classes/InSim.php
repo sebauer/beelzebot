@@ -29,7 +29,7 @@
 define('VER_INSIM', 4);
 define('VER_LFS', '0.5W26');
 
-require_once('insim.defines.php');
+require_once('include/insim.defines.php');
 
 /**
  * InSim
