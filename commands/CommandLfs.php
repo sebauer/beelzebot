@@ -25,7 +25,7 @@ class CommandLfs extends aCommand {
 
         // Only echo message to IRC chan, when using long format
         // since !lfs will be posted to the channel anyways
-        if($command!='!lfs') {
+        if($command!='!LFS') {
             $bot->sendMessage('[toLFS]'.$sender.': '.$text, CHANNEL);
         }
         // Send message to LFS
