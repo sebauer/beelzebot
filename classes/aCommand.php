@@ -54,6 +54,10 @@ abstract class aCommand implements iCommand {
     final public function call($inputLine, InSim $insim, Bot $bot){
 
         $sender = $this->extractSender($inputLine);
+        // Avoid recursion
+        if($sender == USERNAME){
+            return false;
+        }
 
         $inputLine = str_replace(array("\n","\r"), '', $inputLine);
 
