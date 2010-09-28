@@ -15,7 +15,7 @@ class CommandCreateCombo extends aCommand {
     public function handleCall($command, $text, $sender, InSim $insim, Bot $bot){
 
         // Not responsible for this type of command
-        if($command != 'CREATECOMBO') return;
+        if($command != 'CREATECOMBO') return false;
 
         $password = reset(explode(' ', $text));
         $date = next(explode(' ', $text));
@@ -26,7 +26,7 @@ class CommandCreateCombo extends aCommand {
         }
         if($date == ''){
             $bot->sendMessage('No date param given!', $sender);
-            break;
+            return false;
         }
         $bot->log('Retreiving new combo from random combo generator..');
         $serverResult = file_get_contents(LFS_RANDOM_URL.'?date='.$date.'&password='.$password);

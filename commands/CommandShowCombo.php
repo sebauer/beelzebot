@@ -44,7 +44,7 @@ class CommandShowCombo extends aCommand {
         $date = reset(explode(' ', $text));
         if($date == ''){
             $bot->sendMessage('No date param given!', $sender);
-            break;
+            return false;
         }
 
         $bot->log('Retreiving combo from random combo generator..');

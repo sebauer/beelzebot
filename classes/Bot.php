@@ -162,7 +162,7 @@ class Bot {
                 $returnVal = null;
                 foreach($this->_commands as $command){
                     $returnVal = $command->call($result, $insim, $this);
-                    if($returnVal) {
+                    if($returnVal || $returnVal === false) {
                         break;
                     }
                 }

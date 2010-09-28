@@ -48,7 +48,7 @@ class CommandRebuildCombo extends aCommand {
         }
         if($date == ''){
             $bot->sendMessage('No date param given!', $sender);
-            break;
+            return false;
         }
 
         $bot->log('Rebuilding combo at random combo generator..');
