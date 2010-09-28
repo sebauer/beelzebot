@@ -36,7 +36,7 @@ class InSimResponderPLL extends aInSimResponder {
         $bot->log("Received ISP_PLL...");
 
         if($insim->numConnections==2){
-            $this->log("Last player left, server now idle..");
+            $bot->log("Last player left, server now idle..");
             $bot->setServerIdle(true);
         }
     }
