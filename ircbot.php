@@ -50,6 +50,7 @@ $foo = NULL;
 $timeout = time() + 1;
 $activityTimeout = time() + 30;
 $resultLfs = true;
+$packetCount = 0;
 while (!feof($conn)) {
 	$result = fread($conn, 1024);
 	$packet = null;
@@ -93,6 +94,11 @@ while (!feof($conn)) {
 		$firstrun = true;
 	}
 
+	if($packet && $packet[1] != pack("C", ISP_TINY)){
+	    // Do not count PING Packets
+        $packetCount++;
+	}
+
 	if ($packet && $packet[1] == pack("C", ISP_STA)) {
 		echo "Received state pack..".PHP_EOL;
 		$insim->handleStatePackage($packet);
@@ -101,7 +107,7 @@ while (!feof($conn)) {
 			$serverActive = false;
 			echo "Server currently idle..".PHP_EOL;
 		}
-		
+
 		if($firstrun) {
 			sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Users online on server: ".intval($insim->numConnections - 1), $conn);
 		}
@@ -118,7 +124,7 @@ while (!feof($conn)) {
 				sendMessage('[LFS] '.$text, CHANNEL, $conn);
 			}
 		}
-			
+
 	}  else if($packet && $packet[1] == pack("C", ISP_PLL)) {
 		echo "Received ISP_PLL...".PHP_EOL;
 
@@ -126,8 +132,13 @@ while (!feof($conn)) {
 			$serverActive = false;
 			echo "Last player left, server now idle..".PHP_EOL;
 		}
-			
+
 	} else if($packet && $packet[1] == pack("C", ISP_TINY)) {
+	    if($packetCount <= 1){
+	        echo "No activity since last InSim PING, going idle...";
+	        $serverActive = false;
+	    }
+        $packetCount = 0;
 		echo "Received IS_TINY, replying..".PHP_EOL;
 		$insim->sendTiny($insim->makeTiny(TINY_NONE));
 	}else if($packet){
@@ -137,7 +148,7 @@ while (!feof($conn)) {
 
 	// Work with incoming commands
 	if(strpos($result, "PRIVMSG ".USERNAME)!==false || strpos($result, "PRIVMSG ".CHANNEL.' :!lfs')!==false){
-		
+
 		echo "Processing command..".PHP_EOL;
 
 		$result = str_replace(array("\n","\r"), '', $result);
