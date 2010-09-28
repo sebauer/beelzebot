@@ -112,11 +112,13 @@ class Bot {
                 $pong = true;
             }
             if ($pong && !$firstrun && strpos($result, USERNAME.' +i')!==false) {
-                $this->sendCommand("AUTH ".USERNAME." ".PASSWORD, $this->_conn);
-                $this->sendCommand("JOIN ".CHANNEL."\n\r", $this->_conn);
-                $this->sendCommand("TOPIC ".CHANNEL." :Octrin Racing - Users online on server: ".intval($insim->numConnections - 1), $this->_conn);
-                $this->sendMessage('**** Octrin LFS/IRC Bot starting its work.. - Revion .'._REVISION.' ****', CHANNEL, $this->_conn);
-                $this->sendMessage('**** Get ready to rumble! ****', CHANNEL, $this->_conn);
+                $this->sendCommand("AUTH ".USERNAME." ".PASSWORD);
+                $this->sendCommand("JOIN ".CHANNEL."\n\r");
+                $connCount = intval($insim->numConnections - 1);
+                if($connCount < 0) $connCount = 0;
+                $this->sendCommand("TOPIC ".CHANNEL." :".sprintf(TOPIC_TEMPLATE, $connCount));
+                $this->sendMessage('**** Octrin LFS/IRC Bot starting its work.. - Revion .'._REVISION.' ****', CHANNEL);
+                $this->sendMessage('**** Get ready to rumble! ****', CHANNEL);
                 $firstrun = true;
             }
 

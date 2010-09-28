@@ -26,7 +26,7 @@ class CommandRebuildCombo extends aCommand {
         }
 
         $bot->log('Rebuilding combo at random combo generator..');
-        $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$date.'&password='.$password.'&reset');
+        $serverResult = file_get_contents(LFS_RANDOM_URL.$date.'&password='.$password.'&reset');
         $serverResult = explode("\n", $serverResult);
         $pre = false;
         foreach($serverResult as $resultLine){

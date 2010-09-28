@@ -29,7 +29,7 @@ class CommandCreateCombo extends aCommand {
             break;
         }
         $bot->log('Retreiving new combo from random combo generator..');
-        $serverResult = file_get_contents('http://www.gjl-network.net/randomlfs/random.php?date='.$date.'&password='.$password);
+        $serverResult = file_get_contents(LFS_RANDOM_URL.'?date='.$date.'&password='.$password);
         $serverResult = explode("\n", $serverResult);
         $pre = false;
         foreach($serverResult as $resultLine){
