@@ -31,30 +31,18 @@ $bot = new Bot();
 
 
 $bot->log('Loading Commands...');
+$commands = FileLocator::getCommands($bot);
 
-$commandFiles = scandir('commands');
-
-foreach($commandFiles as $commandFile){
-    if(preg_match('/^Command[a-zA-Z]+\.php$/', $commandFile)==0)continue;
-
-    $className = str_replace('.php', '', $commandFile);
-    $bot->log('Loading command '.$className.'..');
-    $command = new $className();
-    $bot->addCommand($command);
+foreach($commands as $command){
+	$bot->addCommand($command);
 }
 
 
 $bot->log('Loading InSimResponders...');
+$responders = FileLocator::getResponders($bot);
 
-$commandFiles = scandir('insimresponders');
-
-foreach($commandFiles as $commandFile){
-    if(preg_match('/^InSimResponder[a-zA-Z]+\.php$/', $commandFile)==0)continue;
-
-    $className = str_replace('.php', '', $commandFile);
-    $bot->log('Loading InSimResponder '.$className.'..');
-    $command = new $className();
-    $bot->addInSimResponder($command);
+foreach($responders as $responder){
+	$bot->addInSimResponder($responder);
 }
 
 $bot->run();
