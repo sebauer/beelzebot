@@ -160,14 +160,14 @@ class Bot {
             if(strpos($result, "PRIVMSG ".USERNAME)!==false || strpos($result, "PRIVMSG ".CHANNEL.' :!')!==false){
 
                 $this->log("Processing command..");
-                $returnVal = false;
+                $returnVal = null;
                 foreach($this->_commands as $command){
                     $returnVal = $command->call($result, $insim, $this);
                     if($returnVal) {
                         break;
                     }
                 }
-                if($returnVal != true){
+                if($returnVal == null){
                     $this->log('No handler for command found!');
                     $this->sendMessage('Unknown command "'.str_replace(array("\n","\r"), '', aCommand::extractCommand($result)).'"', aCommand::extractSender($result));
                 }
