@@ -115,7 +115,7 @@ class Bot {
             if(time() > $activityTimeout){
                 $activityTimeout = time()+30;
                 $this->log("Checking server idle status via LFSWorld..");
-//                $statFile = file_get_contents("http://www.lfsworld.net/hoststatus/?h=".urlencode(LFSHOST));
+                $statFile = file_get_contents("http://www.lfsworld.net/hoststatus/?h=".urlencode(LFSHOST));
                 if(strpos($statFile, '0 / ')!==false){
                     $this->_serverIdle = true;
                     $this->log("Server currently idle...");
@@ -150,7 +150,6 @@ class Bot {
 
             // Work with incoming InSim Packets
             if($packet){
-                $this->log("Processing packet..");
                 foreach($this->_responder as $responder){
                     $responder->call($packet, $insim, $this);
                 }
@@ -159,7 +158,6 @@ class Bot {
 
             // Work with incoming commands
             if(strpos($result, "PRIVMSG ".USERNAME)!==false || strpos($result, "PRIVMSG ".CHANNEL.' :!')!==false){
-
                 $this->log("Processing command..");
                 $returnVal = null;
                 foreach($this->_commands as $command){

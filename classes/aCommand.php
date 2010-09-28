@@ -43,9 +43,12 @@ abstract class aCommand implements iCommand {
     }
 
     static public function extractText($inputLine){
-        $splitByColon = explode(':', $inputLine);
-        $text = preg_replace("/^\!?[a-zA-Z]+\s?/", '', $splitByColon[2]);
-        return $text;
+        $result = array( );
+        $ret = preg_match("/^:.+ PRIVMSG (".USERNAME."|".CHANNEL.") :\!?[a-zA-Z]+\s(.+)$/", $inputLine, $result);
+        if($ret == 0){
+            return '';
+        }
+        return $result[2];
     }
 
     final public function call($inputLine, InSim $insim, Bot $bot){
