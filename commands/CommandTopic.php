@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (c) 2010 Sebastian Bauer
  *
@@ -25,22 +24,29 @@
  * @license MIT
  */
 
-class InSimResponderStat extends aInSimResponder {
+class CommandTopic extends aCommand {
+	
+	private $friendRequestCount = array( );
+	
+    public function isResponsible($command){
+        // Not responsible for this type of command
+        if($command != 'TOPIC' && $command != '!TOPIC') return false;
+        return true;
+    }
 
-	public function isResponsible($packet){
-		if($packet[1] != pack("C", ISP_STA)) return false;
-		return true;
-	}
-
-	public function handleCall($packet, InSim $insim, Bot $bot){
-		$bot->log("Received state pack..");
-		$insim->handleStatePackage($packet);
-
-		if($insim->numConnections==1){
-			$bot->setServerIdle(true);
-		}
+    public function handleCall($command, $text, $sender, InSim $insim, Bot $bot){
+    	$bot->setTopic($text);
+    	
 		$connCount = intval($insim->numConnections - 1);
 		if($connCount < 0) $connCount = 0;
+		
 		$bot->sendCommand("TOPIC ".CHANNEL." :".sprintf(TOPIC_TEMPLATE, $connCount).$bot->getTopic());
-	}
+		
+        return true;
+    }
+
+    public function getHelp(Bot $bot, $sender){
+        $bot->sendMessage('Set an additional topic', $sender);
+        $bot->sendMessage('TOPIC - Usage: /msg '.USERNAME.' TOPIC <text>', $sender);
+    }
 }
