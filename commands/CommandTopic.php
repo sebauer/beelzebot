@@ -25,7 +25,7 @@
  */
 
 class CommandTopic extends aCommand {
-	
+
     public function isResponsible($command){
         // Not responsible for this type of command
         if($command != 'TOPIC' && $command != '!TOPIC') return false;
@@ -34,12 +34,12 @@ class CommandTopic extends aCommand {
 
     public function handleCall($command, $text, $sender, InSim $insim, Bot $bot){
     	$bot->setTopic($text);
-    	
+
 		$connCount = intval($insim->numConnections - 1);
 		if($connCount < 0) $connCount = 0;
-		
-		$bot->sendCommand("TOPIC ".CHANNEL." :".sprintf(TOPIC_TEMPLATE, $connCount).$bot->getTopic());
-		
+
+		$bot->setIrcTopic($connCount);
+
         return true;
     }
 

@@ -41,6 +41,6 @@ class InSimResponderStat extends aInSimResponder {
 		}
 		$connCount = intval($insim->numConnections - 1);
 		if($connCount < 0) $connCount = 0;
-		$bot->sendCommand("TOPIC ".CHANNEL." :".sprintf(TOPIC_TEMPLATE, $connCount).$bot->getTopic());
+		$bot->setIrcTopic($connCount);
 	}
 }

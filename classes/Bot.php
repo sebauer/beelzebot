@@ -135,6 +135,7 @@ class Bot {
 				$statFile = file_get_contents("http://www.lfsworld.net/hoststatus/?h=".urlencode(LFSHOST));
 				if(strpos($statFile, '0 / ')!==false){
 					$this->_serverIdle = true;
+					$this->setIrcTopic();
 					$this->log("Server currently idle...");
 				} else {
 					$this->_serverIdle = false;
@@ -157,14 +158,31 @@ class Bot {
 			if ($pong && !$firstrun && strpos($result, USERNAME.' +i')!==false) {
 				$this->sendCommand("AUTH ".USERNAME." ".PASSWORD);
 				$this->sendCommand("JOIN ".CHANNEL."\n\r");
-				$connCount = intval($insim->numConnections - 1);
-				if($connCount < 0) $connCount = 0;
-				$this->sendCommand("TOPIC ".CHANNEL." :".sprintf(TOPIC_TEMPLATE, $connCount).$this->getTopic());
 				$this->sendMessage(' **** Beelzebot, the Octrin LFS/IRC Bot, is starting its work.. - Revion .'._REVISION.' **** ', CHANNEL);
 				$this->sendMessage(' **** http://code.google.com/p/lfs-irc **** ', CHANNEL);
 				$this->sendMessage(' **** Hell awaits! **** ', CHANNEL);
+                $insim->getStatePack();
+                $resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_NOWAIT);
+                if($connCount < 0) $connCount = 0;
+                $this->setIrcTopic($connCount);
 				$firstrun = true;
 			}
+
+            // Work with incoming commands
+            if(strpos($result, "PRIVMSG ".USERNAME)!==false || strpos($result, "PRIVMSG ".CHANNEL.' :!')!==false){
+                $this->log("Processing command..");
+                $returnVal = null;
+                foreach($this->_commands as $command){
+                    $returnVal = $command->call($result, $insim, $this);
+                    if($returnVal || $returnVal === false) {
+                        break;
+                    }
+                }
+                if(is_null($returnVal)){
+                    $this->log('No handler for command found!');
+                    $this->sendMessage('Unknown command "'.str_replace(array("\n","\r"), '', aCommand::extractCommand($result)).'"', aCommand::extractSender($result));
+                }
+            }
 
 			// Work with incoming InSim Packets
 			if($packet){
@@ -172,22 +190,6 @@ class Bot {
 					$responder->call($packet, $insim, $this);
 				}
 			} else {
-			}
-
-			// Work with incoming commands
-			if(strpos($result, "PRIVMSG ".USERNAME)!==false || strpos($result, "PRIVMSG ".CHANNEL.' :!')!==false){
-				$this->log("Processing command..");
-				$returnVal = null;
-				foreach($this->_commands as $command){
-					$returnVal = $command->call($result, $insim, $this);
-					if($returnVal || $returnVal === false) {
-						break;
-					}
-				}
-				if(is_null($returnVal)){
-					$this->log('No handler for command found!');
-					$this->sendMessage('Unknown command "'.str_replace(array("\n","\r"), '', aCommand::extractCommand($result)).'"', aCommand::extractSender($result));
-				}
 			}
 		}
 		$insim->disconnect();
@@ -209,5 +211,9 @@ class Bot {
 
 	public function log($text){
 		echo date("[Y-m-d h:i:s] ").$text.PHP_EOL;
+	}
+
+	public function setIrcTopic($numConns = 0){
+        $this->sendCommand("TOPIC ".CHANNEL." :".sprintf(TOPIC_TEMPLATE, $numConns).$this->getTopic());
 	}
 }

@@ -42,8 +42,11 @@ class CommandRestart extends aCommand {
             return false;
         }
         // Send message to LFS
-        $insim->reInit();
         $bot->sendMessage(' **** LFS server restart triggered by '.$sender. ' **** ', CHANNEL);
+        $insim->reInit();
+        sleep(5);
+        $insim->disconnect();
+        $insim->isi(INSIM_SERVER, INSIM_PORT, INSIM_PASS);
         return true;
     }
 

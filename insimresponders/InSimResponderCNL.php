@@ -25,20 +25,20 @@
  * @license MIT
  */
 
-class InSimResponderPLL extends aInSimResponder {
+class InSimResponderCNL extends aInSimResponder {
 
     public function isResponsible($packet){
-        if($packet[1] != pack("C", ISP_PLL)) return false;
+        if($packet[1] != pack("C", ISP_CNL)) return false;
         return true;
     }
 
     public function handleCall($packet, InSim $insim, Bot $bot){
-        $bot->log("Received ISP_PLL...");
+        $bot->log("Received ISP_CNL...");
 
         if($insim->numConnections==2){
             $bot->log("Last player left, server now idle..");
             $bot->setServerIdle(true);
-            $bot->sendCommand("TOPIC ".CHANNEL." :".sprintf(TOPIC_TEMPLATE, 0).$bot->getTopic());
+            $bot->setIrcTopic();
         }
     }
 }
