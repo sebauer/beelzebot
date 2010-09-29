@@ -42,7 +42,7 @@ class CommandQuit extends aCommand {
     }
 
     public function getHelp(Bot $bot, $sender){
-        $bot->sendMessage('Disconnects the bot and closes all connections:', $sender);
+        $bot->sendMessage('Disconnects the bot and closes all connections', $sender);
         $bot->sendMessage('QUIT - Usage: /msg '.USERNAME.' QUIT <auth_password>', $sender);
     }
 }
