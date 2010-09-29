@@ -43,7 +43,7 @@ class CommandLfs extends aCommand {
 
     public function handleCall($command, $text, $sender, InSim $insim, Bot $bot){
         if($text==''){
-            $bot->sendMessage('No text given!', $sender);
+            $bot->sendNotice('No text given!', $sender);
             return false;
         }
 
@@ -58,8 +58,8 @@ class CommandLfs extends aCommand {
     }
 
     public function getHelp(Bot $bot, $sender){
-        $bot->sendMessage('Sends a text message to LFS', $sender);
-        $bot->sendMessage('LFS - Usage: /msg '.USERNAME.' LFS <text>', $sender);
-        $bot->sendMessage('Alias: !lfs <text>', $sender);
+        $bot->sendNotice('Sends a text message to LFS', $sender);
+        $bot->sendNotice('LFS - Usage: /msg '.USERNAME.' LFS <text>', $sender);
+        $bot->sendNotice('Alias: !lfs <text>', $sender);
     }
 }

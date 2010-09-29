@@ -44,7 +44,7 @@ class CommandTopic extends aCommand {
     }
 
     public function getHelp(Bot $bot, $sender){
-        $bot->sendMessage('Set an additional topic', $sender);
-        $bot->sendMessage('TOPIC - Usage: /msg '.USERNAME.' TOPIC <text>', $sender);
+        $bot->sendNotice('Set an additional topic', $sender);
+        $bot->sendNotice('TOPIC - Usage: /msg '.USERNAME.' TOPIC <text>', $sender);
     }
 }

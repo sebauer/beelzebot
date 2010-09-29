@@ -42,7 +42,7 @@ class CommandHelp extends aCommand {
         }
         $commandClass = $bot->getCommand($helpCmd);
         if(!$commandClass){
-            $bot->sendMessage('Unknown command "'.$helpCmd.'"', $sender);
+            $bot->sendNotice('Unknown command "'.$helpCmd.'"', $sender);
             return false;
         }
         $commandClass->getHelp($bot, $sender);
@@ -50,14 +50,14 @@ class CommandHelp extends aCommand {
     }
 
     public function getHelp(Bot $bot, $sender){
-        $bot->sendMessage('Available Commands:', $sender);
+        $bot->sendNotice('Available Commands:', $sender);
         $commands = $bot->getCommands();
         $commandList = array( );
         foreach($commands as $commandString => $command) {
             $commandList[] = preg_replace('/^COMMAND/', '', $commandString, 1);
         }
-        $bot->sendMessage(implode(', ', $commandList), $sender);
-        $bot->sendMessage('To get help on a specific command, use HELP:', $sender);
-        $bot->sendMessage('HELP - Usage: /msg '.USERNAME.' HELP <command>', $sender);
+        $bot->sendNotice(implode(', ', $commandList), $sender);
+        $bot->sendNotice('To get help on a specific command, use HELP:', $sender);
+        $bot->sendNotice('HELP - Usage: /msg '.USERNAME.' HELP <command>', $sender);
     }
 }

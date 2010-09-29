@@ -38,7 +38,7 @@ class CommandRestart extends aCommand {
 
     public function handleCall($command, $text, $sender, InSim $insim, Bot $bot){
         if($text!=INSIM_PASS){
-            $bot->sendMessage('Wrong InSim password provided!', $sender);
+            $bot->sendNotice('Wrong InSim password provided!', $sender);
             return false;
         }
         // Send message to LFS
@@ -51,7 +51,7 @@ class CommandRestart extends aCommand {
     }
 
     public function getHelp(Bot $bot, $sender){
-        $bot->sendMessage('Restarts the LFS Server', $sender);
-        $bot->sendMessage('RESTART - Usage: /msg '.USERNAME.' RESTART <server_admin_password>', $sender);
+        $bot->sendNotice('Restarts the LFS Server', $sender);
+        $bot->sendNotice('RESTART - Usage: /msg '.USERNAME.' RESTART <server_admin_password>', $sender);
     }
 }

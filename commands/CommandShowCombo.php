@@ -42,7 +42,7 @@ class CommandShowCombo extends aCommand {
 
         $date = reset(explode(' ', $text));
         if($date == ''){
-            $bot->sendMessage('No date param given!', $sender);
+            $bot->sendNotice('No date param given!', $sender);
             return false;
         }
 
@@ -71,7 +71,7 @@ class CommandShowCombo extends aCommand {
     }
 
     public function getHelp(Bot $bot, $sender){
-        $bot->sendMessage('Shows the combo for the given date', $sender);
-        $bot->sendMessage('SHOWCOMBO - Usage: /msg '.USERNAME.' SHOWCOMBO <date>', $sender);
+        $bot->sendNotice('Shows the combo for the given date', $sender);
+        $bot->sendNotice('SHOWCOMBO - Usage: /msg '.USERNAME.' SHOWCOMBO <date>', $sender);
     }
 }

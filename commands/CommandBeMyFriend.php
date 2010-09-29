@@ -25,9 +25,9 @@
  */
 
 class CommandBeMyFriend extends aCommand {
-	
+
 	private $friendRequestCount = array( );
-	
+
     public function isResponsible($command){
         // Not responsible for this type of command
         if($command != 'BEMYFRIEND' && $command != '!BEMYFRIEND') return false;
@@ -35,25 +35,25 @@ class CommandBeMyFriend extends aCommand {
     }
 
     public function handleCall($command, $text, $sender, InSim $insim, Bot $bot){
-    	
-        $bot->sendMessage('Beelzebot does not need any friends!', $sender);
+
+        $bot->sendNotice('Beelzebot does not need any friends!', $sender);
         if(!array_key_exists($sender, $this->friendRequestCount)){
         	$this->friendRequestCount[$sender] = 1;
         } else {
         	$this->friendRequestCount[$sender]++;
         }
         if($this->friendRequestCount[$sender] >= 2){
-        	$bot->sendMessage('Don\'t make Beelzebot angry!', $sender);
+        	$bot->sendNotice('Don\'t make Beelzebot angry!', $sender);
         }
         if($this->friendRequestCount[$sender] >= 3){
-        	$bot->sendMessage('Your fault! Our friendship cannot be!', $sender);
+        	$bot->sendNotice('Your fault! Our friendship cannot be!', $sender);
         	$bot->sendCommand('KICK '.CHANNEL.' '.$sender.' :Your fault, our friendship cannot be!');
         }
         return true;
     }
 
     public function getHelp(Bot $bot, $sender){
-        $bot->sendMessage('Make friendship with beelzebot', $sender);
+        $bot->sendNotice('Make friendship with beelzebot', $sender);
 //        $bot->sendMessage('QUIT - Usage: /msg '.USERNAME.' QUIT <auth_password>', $sender);
     }
 }

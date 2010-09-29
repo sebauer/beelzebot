@@ -33,7 +33,7 @@ class CommandQuit extends aCommand {
 
     public function handleCall($command, $text, $sender, InSim $insim, Bot $bot){
         if($text != PASSWORD){
-            $bot->sendMessage('Wrong password given!', $sender);
+            $bot->sendNotice('Wrong password given!', $sender);
             return false;
         }
         $insim->sendTextMessage('Beelzebot is now leaving.. Bye, bye!', CHANNEL);
@@ -42,7 +42,7 @@ class CommandQuit extends aCommand {
     }
 
     public function getHelp(Bot $bot, $sender){
-        $bot->sendMessage('Disconnects the bot and closes all connections', $sender);
-        $bot->sendMessage('QUIT - Usage: /msg '.USERNAME.' QUIT <auth_password>', $sender);
+        $bot->sendNotice('Disconnects the bot and closes all connections', $sender);
+        $bot->sendNotice('QUIT - Usage: /msg '.USERNAME.' QUIT <auth_password>', $sender);
     }
 }

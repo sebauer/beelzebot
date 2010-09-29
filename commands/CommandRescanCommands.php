@@ -33,10 +33,10 @@ class CommandRescanCommands extends aCommand {
 
 	public function handleCall($command, $text, $sender, InSim $insim, Bot $bot){
 		if($text != PASSWORD){
-			$bot->sendMessage('Wrong password given!', $sender);
+			$bot->sendNotice('Wrong password given!', $sender);
 			return false;
 		}
-		
+
 		$bot->forgetCommands();
 		$bot->log('Loading Commands...');
 		$commands = FileLocator::getCommands($bot);
@@ -47,12 +47,12 @@ class CommandRescanCommands extends aCommand {
 			$bot->addCommand($command);
 		}
 
-		$bot->sendMessage('Loaded commands: '.implode(', ', $commandList), $sender);
+		$bot->sendNotice('Loaded commands: '.implode(', ', $commandList), $sender);
 		return true;
 	}
 
 	public function getHelp(Bot $bot, $sender){
-		$bot->sendMessage('Re-scans "commands" directory and loads all existing command modules.', $sender);
-		$bot->sendMessage('RESCANCOMMANDS - Usage: /msg '.USERNAME.' RESCANCOMMANDS <auth_password>', $sender);
+		$bot->sendNotice('Re-scans "commands" directory and loads all existing command modules.', $sender);
+		$bot->sendNotice('RESCANCOMMANDS - Usage: /msg '.USERNAME.' RESCANCOMMANDS <auth_password>', $sender);
 	}
 }

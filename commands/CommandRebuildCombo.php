@@ -42,11 +42,11 @@ class CommandRebuildCombo extends aCommand {
         $date = next(explode(' ', $text));
 
         if($password == ''){
-            $bot->sendMessage('No password given!', $sender);
+            $bot->sendNotice('No password given!', $sender);
             return false;
         }
         if($date == ''){
-            $bot->sendMessage('No date param given!', $sender);
+            $bot->sendNotice('No date param given!', $sender);
             return false;
         }
 
@@ -75,7 +75,7 @@ class CommandRebuildCombo extends aCommand {
     }
 
     public function getHelp(Bot $bot, $sender){
-        $bot->sendMessage('Resets the combo for the given date and creates a new one', $sender);
-        $bot->sendMessage('REBUILDCOMBO - Usage: /msg '.USERNAME.' REBUILDCOMBO <password> <date>', $sender);
+        $bot->sendNotice('Resets the combo for the given date and creates a new one', $sender);
+        $bot->sendNotice('REBUILDCOMBO - Usage: /msg '.USERNAME.' REBUILDCOMBO <password> <date>', $sender);
     }
 }

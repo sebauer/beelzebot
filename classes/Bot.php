@@ -199,6 +199,10 @@ class Bot {
 		$this->sendCommand('PRIVMSG '.$receiver.' :'.$input);
 	}
 
+    public function sendNotice($input, $receiver = CHANNEL){
+        $this->sendCommand('NOTICE '.$receiver.' :'.$input);
+    }
+
 	public function sendCommand($input, $noRead = true){
 		$this->log($input);
 		fwrite($this->_conn, $input."\n\r");

@@ -45,11 +45,11 @@ class CommandCreateCombo extends aCommand {
         $date = next(explode(' ', $text));
 
         if($password == ''){
-            $bot->sendMessage('No password given!', $sender);
+            $bot->sendNotice('No password given!', $sender);
             return false;
         }
         if($date == ''){
-            $bot->sendMessage('No date param given!', $sender);
+            $bot->sendNotice('No date param given!', $sender);
             return false;
         }
         $bot->log('Retreiving new combo from random combo generator..');
@@ -77,7 +77,7 @@ class CommandCreateCombo extends aCommand {
     }
 
     public function getHelp(Bot $bot, $sender){
-        $bot->sendMessage('Creates a new combo for the given date', $sender);
-        $bot->sendMessage('CREATECOMBO - Usage: /msg '.USERNAME.' CREATECOMBO <password> <date>', $sender);
+        $bot->sendNotice('Creates a new combo for the given date', $sender);
+        $bot->sendNotice('CREATECOMBO - Usage: /msg '.USERNAME.' CREATECOMBO <password> <date>', $sender);
     }
 }
