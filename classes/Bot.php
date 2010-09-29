@@ -159,7 +159,7 @@ class Bot {
 				$this->sendCommand("AUTH ".USERNAME." ".PASSWORD);
 				$this->sendCommand("JOIN ".CHANNEL."\n\r");
 				$this->sendMessage(' **** Beelzebot, the Octrin LFS/IRC Bot, is starting its work.. - Revion .'._REVISION.' **** ', CHANNEL);
-				$this->sendMessage(' **** http://code.google.com/p/lfs-irc **** ', CHANNEL);
+				$this->sendMessage(' **** http://beelzebot.googlecode.com **** ', CHANNEL);
 				$this->sendMessage(' **** Hell awaits! **** ', CHANNEL);
                 $insim->getStatePack();
                 $resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_NOWAIT);
