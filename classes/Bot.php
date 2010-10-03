@@ -125,9 +125,11 @@ class Bot {
 			$packet = null;
 
 			if(!$this->_serverIdle) {
-				$resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_WAITALL);
+				$packet = socket_read($insim->receiver, 512, PHP_BINARY_READ);
+//				$resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_WAITALL);
 			} else {
-				$resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_NOWAIT);
+                $packet = socket_read($insim->receiver, 512, PHP_BINARY_READ);
+//				$resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_NOWAIT);
 			}
 			if(time() > $activityTimeout){
 				$activityTimeout = time()+30;

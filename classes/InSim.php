@@ -147,7 +147,7 @@ class InSim {
       echo "setting local listening port to " . $this->localport . "\n";
 
     // Make the receiver stream nonblocking to be able to apply timeouts
-    socket_set_block($this->receiver);
+    socket_set_nonblock($this->receiver);
 
     /*
       VARIABLES AFTER HERE:
