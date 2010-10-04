@@ -37,7 +37,7 @@ class CommandQuit extends aCommand {
             return false;
         }
         $insim->sendTextMessage('Beelzebot is now leaving.. Bye, bye!', CHANNEL);
-        $bot->sendCommand('QUIT');
+        $bot->sendCommand('QUIT :Beelzebot is sick of you.. see you in Hell! http://beelzebot.googlecode.com ');
         return true;
     }
 
