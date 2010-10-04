@@ -27,7 +27,7 @@
 
 require_once('include/bootstrap.php');
 
-$bot = new Bot();
+$bot = new Bot(SERVER, IRC_PORT, CHANNEL, USERNAME, PASSWORD, INSIM_SERVER, INSIM_PORT, INSIM_PASS, LFSHOST);
 
 
 $bot->log('Loading Commands...');
