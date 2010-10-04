@@ -117,12 +117,18 @@ class Bot {
 		stream_set_blocking($this->_conn, 0);
 
 		$activityTimeout = time() + 30;
+		$inSimKeepAlive = time() + INSIM_KEEPALIVE;
 		$resultLfs = true;
 		$packetCount = 0;
 
 		while (!feof($this->_conn)) {
 			$result = fread($this->_conn, 1024);
 			$packet = null;
+
+			if(time() > $inSimKeepAlive){
+			    $insim->sendTiny($insim->makeTiny(TINY_NONE));
+			    $inSimKeepAlive = time()+INSIM_KEEPALIVE;
+			}
 
 			if(!$this->_serverIdle) {
 				$packet = socket_read($insim->receiver, 512, PHP_BINARY_READ);
@@ -164,7 +170,7 @@ class Bot {
 				$this->sendMessage(' **** http://beelzebot.googlecode.com **** ', CHANNEL);
 				$this->sendMessage(' **** Hell awaits! **** ', CHANNEL);
                 $insim->getStatePack();
-                $resultLfs = @socket_recv($insim->receiver, $packet, 1024, MSG_NOWAIT);
+                $packet = socket_read($insim->receiver, 512, PHP_BINARY_READ);
                 if($connCount < 0) $connCount = 0;
                 $this->setIrcTopic($connCount);
 				$firstrun = true;
@@ -188,6 +194,7 @@ class Bot {
 
 			// Work with incoming InSim Packets
 			if($packet){
+			    $this->increasePacketCount();
 				foreach($this->_responder as $responder){
 					$responder->call($packet, $insim, $this);
 				}

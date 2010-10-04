@@ -33,6 +33,8 @@
  */
 set_time_limit (0);
 
+define('INSIM_KEEPALIVE', 30);
+
 require_once('include/autoload.php');
 require_once('config.php');
 require_once('include/functions.inc.php');
