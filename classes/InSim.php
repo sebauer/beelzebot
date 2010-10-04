@@ -89,6 +89,8 @@ class InSim {
     var $weather;
     var $wind;
 
+    public $errno = 0;
+    public $errstr = '';
 
     /**
      * InSim::isi()
@@ -118,16 +120,25 @@ class InSim {
                 $showPass .= '*';
                 $j++;
             }
-            echo 'connecting to ' . $this->insimIP . ':' . $this->insimPort . ' with password ' . $showPass . '';
+            echo 'connecting to ' . $this->insimIP . ':' . $this->insimPort . ' with password ' . $showPass . ''.PHP_EOL;
+        }
+
+        $fp = @fsockopen('tcp://'.$this->insimIP, $this->insimPort, $this->errno, $this->errstr, 5);
+        if(!$fp)
+        {
+            echo 'InSim connect failed, server seems to be offline!';
+            die();
+        } else {
+            fclose($fp);
         }
 
         // create sender filestream
-        $errno = 0; $errstr = "";
-        $this->client = @fsockopen('udp://' . $this->insimIP, $this->insimPort, &$errno, &$errstr, 3);
-        if (!$this->client) {
-            die("Error:\nCould not connect to $this->insimIP:$this->insimPort\nError Number: $errno\nError Description: $errstr");
+        $this->client = fsockopen('udp://' . $this->insimIP, $this->insimPort, $this->errno, $this->errstr, 3);
+        if ($this->client == FALSE) {
+            die("Error:\nCould not connect to $this->insimIP:$this->insimPort\nError Number: $this->errno\nError Description: $this->errstr");
         }
-        if($this->debug) echo "connected!\n";
+        if($this->debug && $this->client!=FALSE) echo "UDP connection established!".PHP_EOL;
+
         // create receiver filestream
         $this->localport = 30000;
         $this->receiver = false;
@@ -141,10 +152,10 @@ class InSim {
             $this->receiver = false;
         }
         if ($this->receiver === false) {
-            die("Error:\nCould not bind to $this->localport\nError Number: $errno\nError Description: $errstr");
+            die("Error:\nCould not bind to $this->localport\nError Number: $this->errno\nError Description: $this->errstr");
         }
         if($this->debug)
-        echo "setting local listening port to " . $this->localport . "\n";
+        echo "setting local listening port to " . $this->localport . PHP_EOL;
 
         // Make the receiver stream nonblocking to be able to apply timeouts
         socket_set_nonblock($this->receiver);
@@ -169,8 +180,8 @@ class InSim {
         $packet .= pack("S", 2+4+32);             // Connection Flags - see InSim.txt
 
         $packet .= pack("c", intval(0));          // Sp0
-        $packet .= ord('!');                      // Prefix
-        $packet .= pack("S", 1);                  // NodeSecs - time between packages
+        $packet .= '!';                      // Prefix
+        $packet .= pack("S", 0);                  // NodeSecs - time between packages
 
         if (strlen($this->adminPW) > 16) {
             $this->adminPW = substr($this->adminPW, 0, 16);      // Cut down adminpw if too long
@@ -290,9 +301,10 @@ class InSim {
 
         $timeout = time() + 2;
         while (!$packet && time() <= $timeout) {
-            $result = @socket_recv($this->receiver, $packet, 256, 0);
-            if ($result != 0 && $result != FALSE)
-            break;
+            $packet = socket_read($this->receiver, 512, PHP_BINARY_READ);
+            if ($packet != "" && $packet != FALSE) {
+                break;
+            }
         }
         // check if really a ISM-packet arrived or something else we cant deal with at the moment
         if (!$packet || $packet[1] != pack("C", ISP_ISM)) {
@@ -348,8 +360,8 @@ class InSim {
 
         $timeout = time() + 2;
         while (!$packet && time() <= $timeout) {
-            $result = @socket_recv($this->receiver, $packet, 256, 0);
-            if ($result != 0 && $result != FALSE) {
+            $packet = socket_read($this->receiver, 512, PHP_BINARY_READ);
+            if ($packet != "" && $packet != FALSE) {
                 break;
             }
         }
@@ -432,8 +444,8 @@ class InSim {
 
         $timeout = time() + 2;
         while (!$packet && time() <= $timeout) {
-            $result = @socket_recv($this->receiver, $packet, 256, 0);
-            if ($result != 0 && $result != FALSE) {
+            $packet = socket_read($this->receiver, 512, PHP_BINARY_READ);
+            if ($packet != "" && $packet != FALSE) {
                 break;
             }
         }

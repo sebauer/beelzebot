@@ -98,6 +98,12 @@ class Bot {
 		$insim->debug(1);
 
 		$insim->isi(INSIM_SERVER, INSIM_PORT, INSIM_PASS);
+
+		if($insim->client == FALSE || $insim->receiver == FALSE){
+            $this->log('InSim connection failed!');
+            $this->log($insim->errstr);
+            return false;
+		}
 		$this->log('InSim connected!');
 
 		$this->log('Connecting to IRC Server');
@@ -223,7 +229,7 @@ class Bot {
 	}
 
 	public function log($text){
-		echo date("[Y-m-d h:i:s] ").$text.PHP_EOL;
+		echo @date("[Y-m-d h:i:s] ").$text.PHP_EOL;
 	}
 
 	public function setIrcTopic($numConns = 0){
