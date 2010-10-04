@@ -206,6 +206,7 @@ class Bot {
 				}
 			} else {
 			}
+            usleep(100000);
 		}
 		$insim->disconnect();
 	}
