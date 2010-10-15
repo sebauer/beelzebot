@@ -370,6 +370,6 @@ class Bot {
      * @param string $text
      */
     public function log($text){
-        echo @date("[Y-m-d h:i:s] ").$text.PHP_EOL;
+        echo @date("[Y-m-d H:i:s] ").$text.PHP_EOL;
     }
 }
