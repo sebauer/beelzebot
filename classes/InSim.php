@@ -88,6 +88,8 @@ class InSim {
     var $track;
     var $weather;
     var $wind;
+    
+    private $_connections = array( );
 
     public $errno = 0;
     public $errstr = '';
@@ -632,6 +634,30 @@ class InSim {
         $concat = ' ';  // Just to make sure, that no crap will be sent ;)
         $command = substr(trim('/' . $command .  $concat . $param), 0, 64);
         $this->sendTextMessage($command, true);
+    }
+    
+    /**
+     * Adds a new connection to the list of connections
+     * 
+     * @param int $uid
+     * @param string $username
+     * @param string $nickname
+     */
+    public function addConnection( $uid, $username, $nickname ) {
+    	$this->_connections['uid'.$uid] = array(
+    		'username' => $username,
+    		'nickname' => $nickname
+    	);
+    }
+    
+    public function getConnections() {
+    	return $this->_connections;
+    }
+    
+    public function removeConnection( $uid ) {
+    	if(array_key_exists($this->_connections,'uid'.$uid)) {
+    		unset($this->_connections['uid'.$uid]);
+    	}
     }
 }
 

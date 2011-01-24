@@ -34,6 +34,13 @@ class InSimResponderCNL extends aInSimResponder {
 
     public function handleCall($packet, InSim $insim, Bot $bot){
         $bot->log("Received ISP_CNL...");
+        
+        $byte_packed = unpack("c", substr($packet, 16, 1)); // byte
+        $uid = $byte_packed[1];
+        
+        $bot->log("UID $uid closed connection..");
+        
+        $insim->removeConnection($uid);
 
         if($insim->numConnections==2){
             $bot->log("Last player left, server now idle..");
