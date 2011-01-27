@@ -655,7 +655,7 @@ class InSim {
     }
     
     public function removeConnection( $uid ) {
-    	if(array_key_exists($this->_connections,'uid'.$uid)) {
+    	if(array_key_exists('uid'.$uid, $this->_connections)) {
     		unset($this->_connections['uid'.$uid]);
     	}
     }
