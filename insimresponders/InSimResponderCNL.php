@@ -43,6 +43,7 @@ class InSimResponderCNL extends aInSimResponder {
         $insim->removeConnection($uid);
 
         if($insim->numConnections==2){
+        	$insim->clearConnections();
             $bot->log("Last player left, server now idle..");
             $bot->setServerIdle(true);
             $bot->setIrcTopic();

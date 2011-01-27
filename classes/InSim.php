@@ -408,13 +408,13 @@ class InSim {
             $this->disconnect('The InSim version used by this server is too old!');
         }
         if(substr($this->lfsVersion,0,1) < substr(VER_LFS,0,1)) {
-            $this->disconnect('Incompatible LFS version!');
+            $this->disconnect('Incompatible LFS version ('.$this->lfsVersion.', required: '.VER_LFS.')');
         }
         if((substr($this->lfsVersion,0,1) == substr(VER_LFS,0,1)) && (substr($this->lfsVersion,2,1) < substr(VER_LFS,2,1))) {
-            $this->disconnect('Incompatible LFS version!');
+            $this->disconnect('Incompatible LFS version ('.$this->lfsVersion.', required: '.VER_LFS.')');
         }
         if((substr($this->lfsVersion,0,1) == substr(VER_LFS,0,1)) && (substr($this->lfsVersion,2,1) == substr(VER_LFS,2,1)) && (ord(substr($this->lfsVersion,3,1)) < ord(substr(VER_LFS,3,1)))) {
-            $this->disconnect('Incompatible LFS version!');
+            $this->disconnect('Incompatible LFS version ('.$this->lfsVersion.', required: '.VER_LFS.')');
         }
     }
 
@@ -658,6 +658,10 @@ class InSim {
     	if(array_key_exists($this->_connections,'uid'.$uid)) {
     		unset($this->_connections['uid'.$uid]);
     	}
+    }
+    
+    public function clearConnections() {
+    	$this->_connections = array( );
     }
 }
 
