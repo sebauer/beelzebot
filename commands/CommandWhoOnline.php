@@ -47,7 +47,7 @@ class CommandWhoOnline extends aCommand {
         $count = 0;
         foreach($connections as $connection) {
         	$output .= preg_replace("/\^.{1}/", "", $connection['nickname']) . ' (' . $connection['username'] . ') ';
-        	if($count == count($connections)-1){
+        	if($count == count($connections)-2){
         		$output .= ', ';
         	}
         	$count++;

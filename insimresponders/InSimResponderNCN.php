@@ -37,6 +37,9 @@ class InSimResponderNCN extends aInSimResponder {
         
         $byte_packed = unpack("c", substr($packet, 3, 1)); // byte
         $uid = $byte_packed[1];
+        
+        $bot->log("New connection with UID $uid..");
+        
         $username = trim(substr($packet, 4, 24));
         $nickname = trim(substr($packet, 28, 24));
         
