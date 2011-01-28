@@ -40,9 +40,15 @@ class CommandWhoOnline extends aCommand {
 
     public function handleCall($command, $text, $sender, InSim $insim, Bot $bot){
         $insim->sendTiny($insim->makeTiny(TINY_NPL));
+        $connections = $insim->getConnections();
+        
+        if(count($connections) == 0) {
+        	$bot->sendNotice('Currently no players online', $sender);
+        	return true;
+        }
+        
         $output = 'Players currently online:';
         $bot->sendNotice($output, $sender);
-        $connections = $insim->getConnections();
         $output = '';
         $count = 0;
         foreach($connections as $connection) {
