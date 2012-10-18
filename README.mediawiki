@@ -1,22 +1,19 @@
-beelzebot - An IRC bot for Live for Speed
-=========================================
+= beelzebot =
 
 An IRC bot for Live for Speed building the bridge between LFS and IRC (!QuakeNet).
 
 Requires a Live for Speed S2 server with enabled !InSim.
 
-Supported Commands
-------------------
-
-### In IRC
- * [List of IRC Commands](http://code.google.com/p/beelzebot/w/list?can=2&q=label:CommandsIRC&sort=pagename&colspec=PageName%20Summary%20Changed%20ChangedBy)
+== Supported Commands ==
+=== In IRC ===
+  * [http://code.google.com/p/beelzebot/w/list?can=2&q=label:CommandsIRC&sort=pagename&colspec=PageName%20Summary%20Changed%20ChangedBy List of IRC Commands]
 
 For more information about IRC commands in Beelzebot, visit the [Commands] page.
 
-### In LFS
- * !irc `text` - sends a text message to IRC channel
+=== In LFS ===
+  * !irc `text` - sends a text message to IRC channel
 
-## Configuration Options
+== Configuration Options ==
 This file needs to be saved as "config.php" in the root directory of lfs-irc!
 {{{
 <?php
@@ -35,8 +32,8 @@ define('TOPIC_TEMPLATE', 'IMBA RACING - Users online on Server: %d'); // Templat
 ?>
 }}}
 
-## Enabling / Disabling Commands
+== Enabling / Disabling Commands ==
 See [Commands].
 
-## Enabling / Disabling !InSim Responders
+== Enabling / Disabling !InSim Responders ==
 InSimResponders are automatically loaded from the "insimresponders" directory. To disable specific responders, simply rename the files to `_InSimResponderXXX.php` or remove the file from the directory.
