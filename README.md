@@ -20,7 +20,7 @@ For more information about IRC commands in Beelzebot, visit the [Commands](https
 This file needs to be saved as "config.php" in the root directory of lfs-irc!
 
 ## Enabling / Disabling Commands
-See [Commands].
+See [Commands](https://github.com/sebauer/beelzebot/wiki/IRC-Commands).
 
 ## Enabling / Disabling !InSim Responders
 InSimResponders are automatically loaded from the "insimresponders" directory. To disable specific responders, simply rename the files to `_InSimResponderXXX.php` or remove the file from the directory.
